@@ -83,6 +83,22 @@
         background-size: 32px 32px;
     }
 
+    .grid-bg-anim {
+        animation: grid-drift 22s ease-in-out infinite;
+    }
+
+    @keyframes grid-drift {
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 48px 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    }
+
     .noise-bg::before {
         content: '';
         position: absolute;
@@ -167,7 +183,8 @@
 
     @media (prefers-reduced-motion: reduce) {
         .orb-1,
-        .orb-2 {
+        .orb-2,
+        .grid-bg-anim {
             animation: none;
         }
     }
