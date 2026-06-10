@@ -1,0 +1,12 @@
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# 关键：启用 pretty_urls, 隐藏 .html 后缀
+# 用户访问 /about.html 时会被 301 到 /about,URL 栏永远干净
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  pretty_urls = true
