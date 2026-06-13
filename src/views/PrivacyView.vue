@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Shield, FileText, Cookie, Server, Database, Lock, UserX, UserCheck, Bell, Mail } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { Shield, FileText, Cookie, Server, Database, Lock, UserX, UserCheck, Bell, Mail, List, ChevronDown } from 'lucide-vue-next'
 
 const toc = [
     { id: 'intro', label: '引言', icon: FileText },
@@ -15,9 +16,12 @@ const toc = [
     { id: 'contact', label: '联系我们', icon: Mail }
 ]
 
+const mobileTocOpen = ref(false)
+
 function jump(id: string) {
     const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    mobileTocOpen.value = false
 }
 </script>
 
@@ -44,21 +48,48 @@ function jump(id: string) {
         <section class="container-page py-10">
             <div class="grid lg:grid-cols-[260px_1fr] gap-10">
                 <!-- 目录 -->
-                <aside class="hidden lg:block">
-                    <div class="sticky top-24">
-                        <p
-                            class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
-                            目录
-                        </p>
-                        <ul class="space-y-1">
+                <aside>
+                    <!-- 移动端：可折叠 -->
+                    <div class="lg:hidden mb-6 card overflow-hidden">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium"
+                            @click="mobileTocOpen = !mobileTocOpen"
+                            :aria-expanded="mobileTocOpen">
+                            <span class="flex items-center gap-2">
+                                <List class="h-4 w-4 text-brand-500" />
+                                目录
+                            </span>
+                            <ChevronDown
+                                :class="['h-4 w-4 text-soft transition-transform', mobileTocOpen && 'rotate-180']" />
+                        </button>
+                        <ul v-if="mobileTocOpen" class="border-t border-ink-200 dark:border-ink-800 py-2">
                             <li v-for="t in toc" :key="t.id">
                                 <button @click="jump(t.id)"
-                                    class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40 transition-colors">
+                                    class="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40 transition-colors">
                                     <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
                                     {{ t.label }}
                                 </button>
                             </li>
                         </ul>
+                    </div>
+
+                    <!-- 桌面端：sticky 侧栏 -->
+                    <div class="hidden lg:block">
+                        <div class="sticky top-24">
+                            <p
+                                class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
+                                目录
+                            </p>
+                            <ul class="space-y-1">
+                                <li v-for="t in toc" :key="t.id">
+                                    <button @click="jump(t.id)"
+                                        class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40 transition-colors">
+                                        <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
+                                        {{ t.label }}
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </aside>
 

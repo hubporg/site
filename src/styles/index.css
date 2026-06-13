@@ -188,4 +188,23 @@
             animation: none;
         }
     }
+
+    /* 移动端横向滚动条：更细更隐形 */
+    .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(59, 130, 246, 0.35) transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar {
+        height: 4px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: rgba(59, 130, 246, 0.35);
+        border-radius: 9999px;
+    }
+    .dark .scrollbar-thin {
+        scrollbar-color: rgba(59, 130, 246, 0.5) transparent;
+    }
 }

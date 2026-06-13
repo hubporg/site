@@ -127,8 +127,8 @@ const values = [
 
         <section class="container-page py-8">
             <h2 class="text-2xl font-semibold tracking-tight mb-6">时间轴</h2>
-            <ol class="relative border-l border-ink-200 dark:border-ink-800 ml-2 space-y-8">
-                <li v-for="m in milestones" :key="m.title + m.date" class="pl-6 relative">
+            <ol class="relative border-l border-ink-200 dark:border-ink-800 ml-2 sm:ml-3 space-y-6 sm:space-y-8">
+                <li v-for="m in milestones" :key="m.title + m.date" class="pl-5 sm:pl-6 relative">
                     <span
                         :class="['absolute -left-1.5 top-1.5 h-3 w-3 rounded-full ring-4 ring-ink-50 dark:ring-ink-950',
                             m.ongoing
@@ -141,8 +141,8 @@ const values = [
                         </span>
                         <span v-else>{{ m.date }}</span>
                     </p>
-                    <h3 class="font-semibold mb-1">{{ m.title }}</h3>
-                    <p class="text-sm text-soft">{{ m.body }}</p>
+                    <h3 class="font-semibold text-sm sm:text-base mb-1">{{ m.title }}</h3>
+                    <p class="text-xs sm:text-sm text-soft leading-relaxed">{{ m.body }}</p>
                 </li>
             </ol>
         </section>

@@ -315,7 +315,7 @@ function onRetestClick() {
                 <span class="text-ink-700 dark:text-ink-300">{{ formatSync(nextTestAt) }}</span>
             </p>
 
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
                 <div class="card p-4">
                     <div class="flex items-center gap-2 text-soft text-xs font-mono mb-1">
                         <Server class="h-3.5 w-3.5" />
@@ -368,24 +368,24 @@ function onRetestClick() {
 
             <div v-else class="card overflow-hidden">
                 <div
-                    class="grid grid-cols-12 px-4 py-2.5 text-xs font-mono text-soft border-b border-ink-200 dark:border-ink-800 bg-ink-50/40 dark:bg-ink-1000/40">
+                    class="grid grid-cols-12 px-3 sm:px-4 py-2.5 text-xs font-mono text-soft border-b border-ink-200 dark:border-ink-800 bg-ink-50/40 dark:bg-ink-1000/40">
                     <div class="col-span-1 sm:col-span-1">#</div>
-                    <div class="col-span-8 sm:col-span-9">节点</div>
-                    <div class="col-span-3 sm:col-span-2 text-right">延迟</div>
+                    <div class="col-span-7 sm:col-span-9 min-w-0">节点</div>
+                    <div class="col-span-4 sm:col-span-2 text-right whitespace-nowrap">延迟 / ms</div>
                 </div>
                 <ul class="divide-y divide-ink-200 dark:divide-ink-800">
                     <li v-for="(n, i) in sortedNodes" :key="n.url"
-                        class="grid grid-cols-12 items-center px-4 py-2.5 text-sm hover:bg-ink-50/60 dark:hover:bg-ink-1000/60 transition-colors">
+                        class="grid grid-cols-12 items-center px-3 sm:px-4 py-2.5 text-sm hover:bg-ink-50/60 dark:hover:bg-ink-1000/60 transition-colors gap-2">
                         <div class="col-span-1 sm:col-span-1 font-mono text-xs text-soft">
                             {{ i + 1 }}
                         </div>
-                        <div class="col-span-8 sm:col-span-9 font-mono text-xs sm:text-sm truncate">
+                        <div class="col-span-7 sm:col-span-9 font-mono text-[11px] sm:text-sm min-w-0 truncate" :title="n.name">
                             {{ n.name }}
                         </div>
-                        <div class="col-span-3 sm:col-span-2 flex items-center justify-end gap-1.5 font-mono text-xs"
+                        <div class="col-span-4 sm:col-span-2 flex items-center justify-end gap-1 font-mono text-[11px] sm:text-xs whitespace-nowrap"
                             :class="statusColor(n.status)">
                             <component :is="statusIcon(n.status)"
-                                :class="['h-3.5 w-3.5', isSpinning(n.status) && 'animate-spin']" />
+                                :class="['h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0', isSpinning(n.status) && 'animate-spin']" />
                             <span v-if="n.ping !== null">{{ n.ping }} ms</span>
                             <span v-else-if="n.status === 'fail'">超时</span>
                             <span v-else>—</span>

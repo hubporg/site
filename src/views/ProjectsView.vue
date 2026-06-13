@@ -40,14 +40,16 @@ const filters: { key: FilterKey; label: string; icon: typeof Cpu }[] = [
         </section>
 
         <section class="container-page py-10">
-            <div class="flex flex-wrap items-center gap-2 mb-8">
-                <button v-for="f in filters" :key="f.key" class="btn h-9 px-3 text-sm border transition-colors" :class="filter === f.key
-                    ? 'border-brand-500 text-brand-600 dark:text-brand-400 bg-brand-500/5'
-                    : 'border-ink-200 dark:border-ink-800 text-soft hover:border-brand-400/60'
-                    " @click="filter = f.key">
-                    <component :is="f.icon" class="h-3.5 w-3.5" />
-                    {{ f.label }}
-                </button>
+            <div class="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto pb-2 mb-6 scrollbar-thin">
+                <div class="flex items-center gap-2 min-w-max sm:min-w-0 sm:flex-wrap">
+                    <button v-for="f in filters" :key="f.key" class="btn h-9 px-3 text-sm border transition-colors flex-shrink-0" :class="filter === f.key
+                        ? 'border-brand-500 text-brand-600 dark:text-brand-400 bg-brand-500/5'
+                        : 'border-ink-200 dark:border-ink-800 text-soft hover:border-brand-400/60'
+                        " @click="filter = f.key">
+                        <component :is="f.icon" class="h-3.5 w-3.5" />
+                        {{ f.label }}
+                    </button>
+                </div>
             </div>
 
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

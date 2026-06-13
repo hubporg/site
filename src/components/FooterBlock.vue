@@ -8,13 +8,13 @@ const year = new Date().getFullYear()
 <template>
   <footer class="border-t border-ink-200 dark:border-ink-800 mt-24">
     <div class="container-page py-12">
-      <div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
-        <div>
+      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="sm:col-span-2 lg:col-span-1">
           <div class="flex items-center gap-2 mb-4">
             <img src="/hubp.svg" alt="hubp" class="h-8 w-8 rounded-md" width="32" height="32" />
             <span class="font-bold text-xl">hubp</span>
           </div>
-          <p class="max-w-xs text-sm leading-5 text-soft">
+          <p class="max-w-xs sm:max-w-none text-sm leading-5 text-soft">
             hubporg 是一个专注于开发者工具的技术组织，围绕开源资源访问维护浏览器扩展、Web 加速链接转换与 Cloudflare 边缘代理。
           </p>
           <ul class="flex gap-4 mt-6">

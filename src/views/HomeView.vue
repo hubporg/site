@@ -117,22 +117,22 @@ const joinWays = [
                         维护浏览器扩展、Web 加速链接转换与 Cloudflare 边缘代理，让每一个开发者——无论身处何地——都能稳定地访问开源世界。
                     </p>
 
-                    <div class="flex flex-wrap items-center gap-3 mb-10">
-                        <a href="https://github.com/hubporg" target="_blank" rel="noreferrer" class="btn-primary">
+                    <div class="flex flex-wrap items-center gap-3 mb-10 w-full sm:w-auto">
+                        <a href="https://github.com/hubporg" target="_blank" rel="noreferrer" class="btn-primary w-full sm:w-auto justify-center">
                             <Github class="h-4 w-4" />
                             关注组织
                         </a>
-                        <RouterLink to="/about" class="btn-secondary">
+                        <RouterLink to="/about" class="btn-secondary w-full sm:w-auto justify-center">
                             了解 hubp
                             <ArrowRight class="h-4 w-4" />
                         </RouterLink>
-                        <a href="https://github.akams.cn" target="_blank" rel="noreferrer" class="btn-ghost">
+                        <a href="https://github.akams.cn" target="_blank" rel="noreferrer" class="btn-ghost w-full sm:w-auto justify-center">
                             <Zap class="h-4 w-4" />
                             立即使用 →
                         </a>
                     </div>
 
-                    <div class="flex items-center gap-4 text-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm">
                         <div class="flex -space-x-2">
                         <div v-for="(c, i) in heroAvatars" :key="i"
                             class="h-8 w-8 rounded-full ring-2 ring-white dark:ring-ink-950 bg-gradient-to-br from-brand-400 to-accent flex items-center justify-center text-white text-xs font-semibold overflow-hidden">
@@ -154,20 +154,19 @@ const joinWays = [
 
         <!-- MANIFESTO：组织宣言 -->
         <section class="container-page py-16 sm:py-20">
-            <div class="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
-                <div class="lg:col-span-2">
+            <div class="grid lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-12 items-start">
+                <div class="lg:col-span-2 min-w-0">
                     <p class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
                         宣言 / MANIFESTO
                     </p>
                     <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
                         我们为什么存在
                     </h2>
-                    <p class="text-soft leading-relaxed">
-                        开源代码属于全人类，但当前下载它的速度与稳定性并不均衡。hubporg
-                        想用工程师的方式，把这种差距抹平。
+                    <p class="text-soft leading-relaxed break-words">
+                        开源代码属于全人类，但当前下载它的速度与稳定性并不均衡。hubporg 想用工程师的方式，把这种差距抹平。
                     </p>
                 </div>
-                <div class="lg:col-span-3">
+                <div class="lg:col-span-3 min-w-0">
                     <CodeBlock language="typescript" label="hubp/manifesto.ts" :code="manifesto" />
                     <div class="mt-4 flex items-center gap-2 text-sm font-mono text-soft">
                         <span class="text-ink-400">🚀</span>
@@ -228,11 +227,11 @@ const joinWays = [
                             <Sparkles class="h-5 w-5" />
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <h3 class="font-semibold">ghproxy-extension</h3>
-                                <span class="text-[10px] font-mono text-soft">JavaScript · MIT</span>
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-1">
+                                <h3 class="font-semibold truncate min-w-0">ghproxy-extension</h3>
+                                <span class="text-[10px] font-mono text-soft whitespace-nowrap">JavaScript · MIT</span>
                             </div>
-                            <p class="text-sm text-soft truncate">
+                            <p class="text-sm text-soft line-clamp-2">
                                 智能 GitHub 下载加速浏览器扩展，兼容 IDM，302 重定向
                             </p>
                         </div>
@@ -247,11 +246,11 @@ const joinWays = [
                             <Globe2 class="h-5 w-5" />
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <h3 class="font-semibold">ghproxy-next</h3>
-                                <span class="text-[10px] font-mono text-soft">Next.js · GPL-3.0</span>
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-1">
+                                <h3 class="font-semibold truncate min-w-0">ghproxy-next</h3>
+                                <span class="text-[10px] font-mono text-soft whitespace-nowrap">Next.js · GPL-3.0</span>
                             </div>
-                            <p class="text-sm text-soft truncate">
+                            <p class="text-sm text-soft line-clamp-2">
                                 即用型 GitHub 代理 Web 加速链接转换，节点测速与 Releases 列表
                             </p>
                         </div>
@@ -266,11 +265,11 @@ const joinWays = [
                             <Zap class="h-5 w-5" />
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <h3 class="font-semibold">CF-GitHub-Proxy</h3>
-                                <span class="text-[10px] font-mono text-soft">Cloudflare Workers · MIT</span>
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-1">
+                                <h3 class="font-semibold truncate min-w-0">CF-GitHub-Proxy</h3>
+                                <span class="text-[10px] font-mono text-soft whitespace-nowrap">Cloudflare Workers · MIT</span>
                             </div>
-                            <p class="text-sm text-soft truncate">
+                            <p class="text-sm text-soft line-clamp-2">
                                 零服务器部署的 GitHub 镜像代理，Cloudflare Workers / Snippets
                             </p>
                         </div>

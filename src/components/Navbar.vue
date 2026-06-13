@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from 'vue-router'
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Sun, Moon, Github, Menu, X } from 'lucide-vue-next'
 import { useThemeStore } from '@/stores/theme'
 
@@ -23,11 +23,27 @@ function onScroll() {
   scrolled.value = window.scrollY > 8
 }
 
+// 路由切换自动关闭移动菜单 + 解锁滚动
+watch(
+  () => route.fullPath,
+  () => {
+    mobileOpen.value = false
+  }
+)
+
+watch(mobileOpen, (open) => {
+  if (typeof document === 'undefined') return
+  document.documentElement.style.overflow = open ? 'hidden' : ''
+})
+
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
   onScroll()
 })
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  if (typeof document !== 'undefined') document.documentElement.style.overflow = ''
+})
 </script>
 
 <template>
