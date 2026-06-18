@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Github, Mail, MessagesSquare } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import ProviderBadge from '@/components/ProviderBadge.vue'
 
 const year = new Date().getFullYear()
 </script>
@@ -105,6 +106,8 @@ const year = new Date().getFullYear()
         class="mt-12 pt-8 border-t border-ink-200 dark:border-ink-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-soft">
         <p>© {{ year }} hubporg · Powered by hubporg &amp; contributors.</p>
         <div class="flex flex-col sm:flex-row items-center gap-3 text-xs">
+          <ProviderBadge />
+          <span class="hidden sm:inline">·</span>
           <span>MIT · GPL-3.0</span>
         </div>
       </div>

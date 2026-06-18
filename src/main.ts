@@ -14,6 +14,7 @@ $$ |      \$$$$$$  |\$$$$$\$$$$  |\$$$$$$$\ $$ |      \$$$$$$$\ \$$$$$$$ |      
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import Clarity from '@microsoft/clarity'
 import App from './App.vue'
 import { router } from './router'
 import { useThemeStore } from './stores/theme'
@@ -69,5 +70,9 @@ app.use(router)
 
 const theme = useThemeStore()
 theme.init()
+
+// Microsoft Clarity: 用户行为分析 (录屏 / 热力图 / 漏斗)
+// Project ID: x5zqb8hij6
+Clarity.init('x5zqb8hij6')
 
 app.mount('#app')
