@@ -1,24 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 type Provider = 'vercel' | 'netlify' | 'unknown'
 
 const provider = ref<Provider>('unknown')
-const CACHE_KEY = 'hubp:provider'
+const route = useRoute()
 
-onMounted(async () => {
-    // 1. 优先读 session 缓存
-    try {
-        const cached = sessionStorage.getItem(CACHE_KEY) as Provider | null
-        if (cached === 'vercel' || cached === 'netlify') {
-            provider.value = cached
-            return
-        }
-    } catch {
-        /* noop */
-    }
-
-    // 2. HEAD 请求同源 URL,从响应头探测
+async function detect() {
     try {
         const res = await fetch(window.location.href, {
             method: 'HEAD',
@@ -33,14 +22,19 @@ onMounted(async () => {
         } else {
             provider.value = 'unknown'
         }
-        try {
-            sessionStorage.setItem(CACHE_KEY, provider.value)
-        } catch {
-            /* noop */
-        }
     } catch {
         provider.value = 'unknown'
     }
+}
+
+onMounted(() => {
+    detect()
+})
+
+// SPA 路由切换时也重新探测
+watch(() => route.fullPath, () => {
+    provider.value = 'unknown'
+    detect()
 })
 </script>
 
