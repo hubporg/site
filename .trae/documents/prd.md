@@ -24,7 +24,7 @@ hubporg 官网是一个面向开发者社区的品牌门户，集中展示 **hub
 1. **首页 Home** - 组织使命、价值观、产品速览、社区入口
 2. **项目页 Projects** - 三大产品详细卡片（浏览器扩展 / Web 前端 / 边缘代理）
 3. **加速页 Accelerate** - 三种方式加速 GitHub（扩展 / Web 控制台 / Cloudflare 自部署）
-4. **节点页 Nodes** - 运行时从 cdn.akams.cn/hubp/github.json 拉取节点列表，拼接 icon128.png 测速
+4. **节点页 Nodes** - 运行时从 hubp.tbedu.top/nodes.json 拉取节点列表，拼接 icon128.png 测速
 5. **关于页 About** - 组织使命、技术理念、贡献者、社区准则
 
 ### 3.2 全局模块

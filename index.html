@@ -24,6 +24,108 @@
 <body class="antialiased">
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
+
+  <!--
+    非 www.hubp.org 域名时，3 秒倒计时后自动跳转到 www.hubp.org
+    保留 pathname / search / hash，实现对等跳转
+  -->
+  <script>
+    ; (function () {
+      try {
+        var TARGET_HOST = 'www.hubp.org'
+        var FALLBACK_HOST = 'hubp.org'
+        var host = location.hostname.toLowerCase()
+        if (host === TARGET_HOST || host === FALLBACK_HOST) return
+
+        var targetUrl =
+          'https://' + TARGET_HOST + location.pathname + location.search + location.hash
+        var seconds = 3
+        var timer = null
+
+        var style = document.createElement('style')
+        style.textContent = [
+          '.hubp-jump{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;',
+          'display:flex;align-items:center;gap:14px;max-width:calc(100% - 32px);width:520px;',
+          'padding:14px 14px 14px 18px;border-radius:12px;',
+          'background:rgba(17,18,26,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);',
+          'border:1px solid rgba(96,165,250,.25);box-shadow:0 12px 40px rgba(0,0,0,.35);',
+          'color:#f4f4f5;font-family:"Sora","Noto Sans SC",system-ui,-apple-system,sans-serif;',
+          'font-size:14px;line-height:1.5;animation:hubpJumpIn .3s ease-out;overflow:hidden}',
+          '.hubp-jump-icon{flex:none;width:28px;height:28px;border-radius:8px;',
+          'background:#ffffff;display:flex;align-items:center;justify-content:center;overflow:hidden}',
+          '.hubp-jump-icon img{width:100%;height:100%;display:block;object-fit:contain}',
+          '.hubp-jump-body{flex:1;min-width:0}',
+          '.hubp-jump-title{font-weight:600;margin-bottom:2px}',
+          '.hubp-jump-sub{color:#8a8f98;font-size:12.5px}',
+          '.hubp-jump-sub b{color:#60a5fa;font-variant-numeric:tabular-nums;font-weight:600}',
+          '.hubp-jump-progress{height:3px;background:rgba(96,165,250,.15);border-radius:999px;',
+          'margin-top:8px;overflow:hidden}',
+          '.hubp-jump-progress>i{display:block;height:100%;width:0;',
+          'background:linear-gradient(90deg,#3b82f6,#22c55e);transition:width 1s linear}',
+          '.hubp-jump-actions{flex:none;display:flex;gap:8px}',
+          '.hubp-jump-btn{cursor:pointer;border:0;border-radius:8px;padding:7px 14px;',
+          'font:inherit;font-size:13px;font-weight:500;line-height:1;transition:all .2s}',
+          '.hubp-jump-btn-primary{background:#3b82f6;color:#fff}',
+          '.hubp-jump-btn-primary:hover{background:#2563eb}',
+          '.hubp-jump-btn-ghost{background:transparent;color:#8a8f98;border:1px solid #1f2937}',
+          '.hubp-jump-btn-ghost:hover{color:#f4f4f5;border-color:#374151}',
+          '@keyframes hubpJumpIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}',
+          'to{opacity:1;transform:translateX(-50%) translateY(0)}}',
+          '@media (max-width:540px){.hubp-jump{width:auto;bottom:16px;left:16px;right:16px;',
+          'transform:none;animation:none}.hubp-jump-actions{flex-direction:column-reverse;gap:6px}',
+          '.hubp-jump-btn{width:100%}}'
+        ].join('')
+        document.head.appendChild(style)
+
+        var box = document.createElement('div')
+        box.className = 'hubp-jump'
+        box.setAttribute('role', 'alertdialog')
+        box.setAttribute('aria-live', 'polite')
+        box.innerHTML = [
+          '<div class="hubp-jump-icon"><img src="/hubp.svg" alt="hubp" /></div>',
+          '<div class="hubp-jump-body">',
+          '  <div class="hubp-jump-title">检测到非官方域名，即将跳转</div>',
+          '  <div class="hubp-jump-sub">将在 <b data-hubp-sec>' + seconds + '</b> 秒后前往 <b>www.hubp.org</b></div>',
+          '  <div class="hubp-jump-progress"><i data-hubp-bar></i></div>',
+          '</div>',
+          '<div class="hubp-jump-actions">',
+          '  <button type="button" class="hubp-jump-btn hubp-jump-btn-primary" data-hubp-go>立即跳转</button>',
+          '</div>'
+        ].join('')
+        document.body.appendChild(box)
+
+        var secEl = box.querySelector('[data-hubp-sec]')
+        var barEl = box.querySelector('[data-hubp-bar]')
+        var goBtn = box.querySelector('[data-hubp-go]')
+
+        var started = false
+        function go() {
+          if (started) return
+          started = true
+          clearTimeout(timer)
+          location.replace(targetUrl)
+        }
+
+        function tick() {
+          if (seconds <= 0) {
+            barEl.style.width = '100%'
+            timer = setTimeout(go, 220)
+            return
+          }
+          secEl.textContent = seconds
+          barEl.style.width = ((3 - seconds) / 3) * 100 + '%'
+          seconds--
+          timer = setTimeout(tick, 1000)
+        }
+
+        goBtn.addEventListener('click', go)
+
+        tick()
+      } catch (e) {
+        console.error('hubp redirect error:', e)
+      }
+    })()
+  </script>
 </body>
 
 </html>

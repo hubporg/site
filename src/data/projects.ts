@@ -14,7 +14,7 @@ export interface Project {
     releasedAt?: string
 }
 
-// 节点列表与测速逻辑在 NodesView 中运行时从 cdn.akams.cn/hubp/github.json 拉取
+// 节点列表与测速逻辑在 NodesView 中运行时从 hubp.tbedu.top/nodes.json 拉取
 
 export const projects: Project[] = [
     {
@@ -103,4 +103,4 @@ export const projects: Project[] = [
     }
 ]
 
-// 节点列表改由 NodesView 运行时从 cdn.akams.cn/hubp/github.json 拉取 + 测速
+// 节点列表改由 NodesView 运行时从 hubp.tbedu.top/nodes.json 拉取 + 测速

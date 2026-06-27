@@ -29,7 +29,7 @@ interface Cache {
     items: CacheItem[]
 }
 
-const NODES_JSON = 'https://cdn.akams.cn/hubp/github.json'
+const NODES_JSON = 'https://hubp.tbedu.top/nodes.json'
 const TEST_ICON =
     'https://raw.githubusercontent.com/hubporg/ghproxy-extension/refs/heads/main/icons/icon128.png'
 const CACHE_KEY = 'hubp:nodes-cache'
@@ -279,8 +279,8 @@ function onRetestClick() {
                     节点实时测速
                 </h1>
                 <p class="text-soft max-w-2xl leading-relaxed">
-                    从 <a href="https://cdn.akams.cn/hubp/github.json" target="_blank" rel="noreferrer"
-                        class="text-brand-600 dark:text-brand-400 hover:underline">cdn.akams.cn</a>
+                    从 <a href="https://hubp.tbedu.top/nodes.json" target="_blank" rel="noreferrer"
+                        class="text-brand-600 dark:text-brand-400 hover:underline">hubp.tbedu.top</a>
                     拉取节点列表，并行通过拼接
                     <code class="font-mono text-xs">icon128.png</code>
                     测速。结果按延迟升序排序。
@@ -293,7 +293,7 @@ function onRetestClick() {
                 <div class="flex items-center gap-2 text-xs text-soft font-mono flex-wrap">
                     <Activity class="h-3.5 w-3.5" />
                     数据源：
-                    <code class="text-ink-700 dark:text-ink-300">cdn.akams.cn/hubp/github.json</code>
+                    <code class="text-ink-700 dark:text-ink-300">hubp.tbedu.top/nodes.json</code>
                     <span v-if="lastSync" class="ml-1">· 同步于 {{ formatSync(lastSync) }}</span>
                     <span v-if="source === 'cache'" class="ml-1 text-accent">· 缓存</span>
                     <span v-else-if="source === 'fresh'" class="ml-1 text-brand-500">· 实时</span>
