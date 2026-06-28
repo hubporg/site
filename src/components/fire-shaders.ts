@@ -14,7 +14,6 @@ export const FRAG_SIM = `#version 300 es
   uniform sampler2D u_back;
   float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
   void main(){
-    // 不翻转计算 UV，保持原版逻辑
     vec2 uv=v_uv;
     vec2 g=uv*vec2(72.0,6.0);
     vec2 id=floor(g);
@@ -22,7 +21,6 @@ export const FRAG_SIM = `#version 300 es
     float h=hash(id);
     vec2 ap=abs(cf-0.5);
     float cell=smoothstep(0.34,0.22,max(ap.x*0.9,ap.y));
-    // 只翻转纹理读取方向（历史帧镜像）
     vec2 rUV=vec2(1.0-v_uv.x, v_uv.y);
     vec3 prev=texture(u_back,rUV).rgb;
     float fade_mask = smoothstep(0.15, 0.28, uv.x);

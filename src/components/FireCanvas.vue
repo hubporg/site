@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useWebglFire } from './useWebglFire.js'
+import { useWebglFire } from './useWebglFire'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 useWebglFire(canvasRef)
