@@ -35,7 +35,15 @@
         var TARGET_HOST = 'www.hubp.org'
         var FALLBACK_HOST = 'hubp.org'
         var host = location.hostname.toLowerCase()
-        if (host === TARGET_HOST || host === FALLBACK_HOST) return
+        if (
+          host === TARGET_HOST ||
+          host === FALLBACK_HOST ||
+          host === 'localhost' ||
+          host === '127.0.0.1' ||
+          host === '0.0.0.0' ||
+          host === '::1' ||
+          !host
+        ) return
 
         var targetUrl =
           'https://' + TARGET_HOST + location.pathname + location.search + location.hash

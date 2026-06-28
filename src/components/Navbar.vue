@@ -12,6 +12,7 @@ const mobileOpen = ref(false)
 const links = [
   { to: '/', label: '首页' },
   { to: '/projects', label: '项目' },
+  { to: '/projects/extension', label: '扩展' },
   { to: '/accelerate', label: '加速' },
   { to: '/nodes', label: '节点' },
   { to: '/about', label: '关于' }

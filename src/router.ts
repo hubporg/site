@@ -14,6 +14,18 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '项目矩阵 - hubp' }
     },
     {
+        path: '/projects/extension',
+        name: 'extension',
+        component: () => import('@/views/ExtensionView.vue'),
+        meta: { title: 'ghproxy-extension 浏览器扩展 - hubp' }
+    },
+    {
+        path: '/projects/extension/privacy',
+        name: 'extension-privacy',
+        component: () => import('@/views/ExtensionPrivacy.vue'),
+        meta: { title: '扩展隐私政策 - hubp' }
+    },
+    {
         path: '/accelerate',
         name: 'accelerate',
         component: () => import('@/views/AccelerateView.vue'),

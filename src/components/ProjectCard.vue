@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import type { Project } from '@/data/projects'
-import { Github, ArrowUpRight, Star } from 'lucide-vue-next'
+import { Github, ArrowUpRight, Star, Globe } from 'lucide-vue-next'
 
 const props = defineProps<{ project: Project; compact?: boolean }>()
+
+const detailTo = computed(() =>
+    props.project.category === 'extension' ? '/projects/extension' : null
+)
+
+// 项目的外部在线地址
+const externalUrl = computed(() => {
+    const map: Record<string, string> = {
+        'ghproxy-next': 'https://github.akams.cn',
+        'cf-github-proxy': 'https://gh-proxy.geekertao.com'
+    }
+    return map[props.project.id] || null
+})
 
 const accentBar = computed(() => {
     switch (props.project.category) {
@@ -32,14 +46,16 @@ const categoryLabel = computed(() => {
     }
     return '项目'
 })
-function openRepo() {
+function openRepo(e: Event) {
     window.open(props.project.url, '_blank', 'noopener,noreferrer')
 }
 </script>
 
 <template>
-    <article
-        class="card group relative overflow-hidden hover:border-brand-400/60 dark:hover:border-brand-500/60 hover:shadow-soft transition-all">
+    <component
+        :is="detailTo ? RouterLink : 'article'"
+        :to="detailTo ?? undefined"
+        class="card group relative overflow-hidden hover:border-brand-400/60 dark:hover:border-brand-500/60 hover:shadow-soft transition-all block">
         <span class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r" :class="accentBar" />
         <div class="p-6">
             <div class="flex items-start justify-between gap-3 mb-3">
@@ -81,17 +97,31 @@ function openRepo() {
             </div>
 
             <div class="flex items-center justify-between">
-                <a :href="project.url" target="_blank" rel="noreferrer"
+                <a v-if="!detailTo" :href="project.url" target="_blank" rel="noreferrer"
                     class="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 dark:text-brand-400 group-hover:gap-2.5 transition-all">
                     <Github class="h-4 w-4" />
                     <span class="font-mono text-xs">{{ project.repo }}</span>
                     <ArrowUpRight class="h-3.5 w-3.5" />
                 </a>
-                <button class="btn-ghost text-xs" :aria-label="`Star ${project.name}`" @click="openRepo">
-                    <Star class="h-3.5 w-3.5" />
-                    Star
-                </button>
+                <span v-else
+                    class="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 dark:text-brand-400 group-hover:gap-2.5 transition-all">
+                    <Github class="h-4 w-4" />
+                    <span class="font-mono text-xs">{{ project.repo }}</span>
+                    <ArrowUpRight class="h-3.5 w-3.5" />
+                </span>
+                <div class="flex items-center gap-2">
+                    <a v-if="externalUrl" :href="externalUrl" target="_blank" rel="noreferrer"
+                        class="btn-ghost text-xs">
+                        <Globe class="h-3.5 w-3.5" />
+                        在线
+                    </a>
+                    <button class="btn-ghost text-xs" :aria-label="`Star ${project.name}`"
+                        @click="openRepo">
+                        <Star class="h-3.5 w-3.5" />
+                        Star
+                    </button>
+                </div>
             </div>
         </div>
-    </article>
+    </component>
 </template>
