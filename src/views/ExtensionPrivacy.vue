@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Shield, ArrowLeft, ExternalLink, AlertTriangle, CheckCircle, Info, Database, Globe, Code } from 'lucide-vue-next'
+import { Shield, ArrowLeft, ExternalLink, AlertTriangle, Info, Code } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
@@ -9,11 +10,11 @@ import { Shield, ArrowLeft, ExternalLink, AlertTriangle, CheckCircle, Info, Data
             <div
                 class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink-50 dark:to-ink-950" />
             <div class="container-page relative pt-20 pb-16 sm:pt-28 sm:pb-20">
-                <a href="/projects/extension"
+                <RouterLink to="/projects/extension"
                     class="inline-flex items-center gap-1.5 text-sm text-soft hover:text-primary transition-colors mb-6">
                     <ArrowLeft class="h-3.5 w-3.5" />
                     返回扩展详情
-                </a>
+                </RouterLink>
                 <div class="flex items-center gap-3 mb-4">
                     <div
                         class="flex items-center justify-center h-10 w-10 rounded-lg bg-primary/10 text-primary">

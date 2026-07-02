@@ -26,6 +26,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '扩展隐私政策 - hubp' }
     },
     {
+        path: '/projects/extension/install',
+        name: 'extension-install',
+        component: () => import('@/views/ExtensionInstallGuide.vue'),
+        meta: { title: '扩展安装教程 - hubp' }
+    },
+    {
         path: '/accelerate',
         name: 'accelerate',
         component: () => import('@/views/AccelerateView.vue'),

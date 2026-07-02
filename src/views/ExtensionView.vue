@@ -52,10 +52,9 @@ const installTarget = computed(() => {
                 icon: Globe2
             }
         case 'chrome':
-            // Chrome Web Store 链接（占位，待上架后替换）
             return {
                 name: 'Chrome 应用商店',
-                href: 'https://chromewebstore.google.com/detail/ghproxy-extension',
+                href: 'https://chromewebstore.google.com/detail/github-accelerator-github/bcbnfbcmbcoogjihnoediilgpfohkdef',
                 icon: Globe2
             }
         default:
@@ -242,6 +241,14 @@ const installLinks = computed(() => {
             tag: 'edge' as BrowserType
         },
         {
+            name: 'Chrome 应用商店',
+            short: 'Chrome',
+            desc: 'Chrome Web Store 官方上架(需网络环境)',
+            icon: Globe2,
+            href: 'https://chromewebstore.google.com/detail/github-accelerator-github/bcbnfbcmbcoogjihnoediilgpfohkdef',
+            tag: 'chrome' as BrowserType
+        },
+        {
             name: 'Firefox 附加组件',
             short: 'Firefox',
             desc: 'AMO 官方上架',
@@ -259,11 +266,11 @@ const installLinks = computed(() => {
         }
     ]
     const bt = browserType.value
-    // 当前浏览器排第一并标记推荐；Chrome 同时推 Edge（无 Chrome 商店）
+    // 当前浏览器排第一并标记推荐
     return all
         .map(l => ({
             ...l,
-            primary: l.tag === bt || (bt === 'chrome' && l.tag === 'edge')
+            primary: l.tag === bt
         }))
         .sort((a, b) => (a.primary === b.primary ? 0 : a.primary ? -1 : 1))
 })
@@ -295,16 +302,22 @@ const copyLink = `// 浏览器扩展 - 复制加速链接
 // 也可启用"全局加速"
 //   下载请求一律走扩展，零额外操作`
 
-const devLoad = `// Chrome / Edge 开发者模式安装
-1. 从 Releases 下载最新 .crx 文件
-2. 将 .crx 改名为 .zip，解压到任意目录
-3. 打开 chrome://extensions 开启「开发者模式」
-4. 选择「加载已解压的扩展」→ 选择解压后的目录
+const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
+1. 从 Releases 下载 .crx 文件（无需解压）
+2. 打开 chrome://extensions
+3. 将 .crx 文件直接拖入扩展页面即可安装
+
+// 方式 B：解压后开发者模式安装（Chrome / Edge） [不推荐]
+1. 从 Releases 下载 .zip 文件
+2. 打开 chrome://extensions
+4. 开启右上角「开发者模式」
+5. 点击「加载已解压的扩展」→ 选择解压后的目录(请勿删除解压后的目录，否则扩展将无法工作，浏览器会提示未能成功加载扩展程序)
 
 // Firefox 安装
 1. 从 Releases 下载最新 .xpi 文件
-2. 打开 about:addons → 齿轮图标 → 从文件安装附加组件
-3. 选择 .xpi 文件即可`
+2.此时Firefox会问你是否确认安装。
+3. 点击「添加」即可完成安装。
+`
 </script>
 
 <template>
@@ -644,12 +657,19 @@ const devLoad = `// Chrome / Edge 开发者模式安装
                     <CodeBlock language="javascript" label="extension / usage" :code="copyLink" />
                 </div>
                 <div>
-                    <div class="flex items-center gap-2 mb-3">
-                        <Code2 class="h-4 w-4 text-orange-500" />
-                        <h3 class="font-semibold">开发者模式安装</h3>
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <div class="flex items-center gap-2">
+                            <Code2 class="h-4 w-4 text-orange-500" />
+                            <h3 class="font-semibold">开发者模式安装</h3>
+                        </div>
+                        <RouterLink to="/projects/extension/install"
+                            class="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">
+                            查看详细教程
+                            <span aria-hidden="true">→</span>
+                        </RouterLink>
                     </div>
                     <p class="text-sm text-soft mb-4">
-                        想自定义偏好或从源码安装？下载 Release 的 CRX/XPI 文件，解压后用「加载已解压的扩展」方式安装。
+                        想自定义偏好或从源码安装？下载 Release 的 CRX/XPI 文件，可选择「解压后加载」或「直接拖入」两种方式。
                     </p>
                     <CodeBlock language="bash" label="extension / dev" :code="devLoad" />
                 </div>
@@ -693,22 +713,32 @@ const devLoad = `// Chrome / Edge 开发者模式安装
                         直接跳转对应浏览器商店安装，最快 5 秒装好。<br />开源仓库接受 PR 与 issue。
                     </p>
                 </div>
-                <div class="relative flex flex-wrap gap-3 sm:justify-end">
-                    <a :href="installTarget.href"
-                        target="_blank" rel="noreferrer" class="btn-primary">
-                        <Download class="h-4 w-4" />
-                        {{ installTarget.name }}
-                    </a>
-                    <a href="https://github.com/hubporg/ghproxy-extension" target="_blank" rel="noreferrer"
-                        class="btn-secondary">
-                        <Star class="h-4 w-4" />
-                        GitHub 仓库
-                    </a>
-                    <a href="/projects/extension/privacy"
-                        class="btn-ghost text-sm">
-                        <Shield class="h-4 w-4" />
-                        隐私政策
-                    </a>
+                <div class="relative flex flex-col gap-4 sm:items-end">
+                    <div class="flex flex-wrap gap-3 sm:justify-end">
+                        <a :href="installTarget.href"
+                            target="_blank" rel="noreferrer" class="btn-primary">
+                            <Download class="h-4 w-4" />
+                            {{ installTarget.name }}
+                        </a>
+                        <a href="https://github.com/hubporg/ghproxy-extension" target="_blank" rel="noreferrer"
+                            class="btn-secondary">
+                            <Star class="h-4 w-4" />
+                            GitHub 仓库
+                        </a>
+                    </div>
+                    <div class="flex flex-wrap gap-x-4 gap-y-1.5 sm:justify-end text-xs">
+                        <RouterLink to="/projects/extension/privacy"
+                            class="inline-flex items-center gap-1 text-soft hover:text-primary transition-colors">
+                            <Shield class="h-3.5 w-3.5" />
+                            隐私政策
+                        </RouterLink>
+                        <span class="text-ink-300 dark:text-ink-700" aria-hidden="true">·</span>
+                        <RouterLink to="/projects/extension/install"
+                            class="inline-flex items-center gap-1 text-soft hover:text-primary transition-colors">
+                            <BookOpen class="h-3.5 w-3.5" />
+                            安装教程
+                        </RouterLink>
+                    </div>
                 </div>
             </div>
         </section>
