@@ -14,7 +14,7 @@ const detailTo = computed(() =>
 const externalUrl = computed(() => {
     const map: Record<string, string> = {
         'ghproxy-next': 'https://github.akams.cn',
-        'cf-github-proxy': 'https://gh-proxy.geekertao.com'
+        'cf-github-proxy': 'https://gh-proxy.geekertao.top'
     }
     return map[props.project.id] || null
 })
