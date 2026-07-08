@@ -97,7 +97,7 @@ async function measure(node: RemoteNode) {
         window.clearTimeout(timeout)
         const ms = Math.round(performance.now() - t0)
         node.ping = ms
-        node.status = ms < 800 ? 'ok' : ms < 2000 ? 'warn' : 'ok'
+        node.status = ms < 800 ? 'ok' : ms < 2000 ? 'warn' : 'fail'
     } catch {
         node.ping = null
         node.status = 'fail'
@@ -324,14 +324,14 @@ function onRetestClick() {
                     <p class="text-2xl font-semibold">{{ stats.total }}</p>
                 </div>
                 <div class="card p-4">
-                    <div class="flex items-center gap-2 text-accent text-xs font-mono mb-1">
+                    <div class="flex items-center gap-2 text-emerald-500 text-xs font-mono mb-1">
                         <CheckCircle2 class="h-3.5 w-3.5" />
                         可用
                     </div>
                     <p class="text-2xl font-semibold">{{ stats.ok }}</p>
                 </div>
                 <div class="card p-4">
-                    <div class="flex items-center gap-2 text-amber-500 text-xs font-mono mb-1">
+                    <div class="flex items-center gap-2 text-orange-500 text-xs font-mono mb-1">
                         <AlertTriangle class="h-3.5 w-3.5" />
                         较慢
                     </div>
