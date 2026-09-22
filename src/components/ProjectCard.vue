@@ -2,9 +2,20 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { Project } from '@/data/projects'
+import { useRepoLanguages } from '@/composables/useRepoLanguages'
 import { Github, ArrowUpRight, Star, Globe } from 'lucide-vue-next'
 
 const props = defineProps<{ project: Project; compact?: boolean }>()
+
+const { segments, loading: langLoading } = useRepoLanguages(() => props.project.repo)
+
+// API 不可用时回退到静态语言信息
+const languages = computed(() => {
+    if (segments.value.length) return segments.value
+    return props.project.language ? [props.project.language] : []
+})
+
+const topLanguage = computed(() => languages.value[0] ?? null)
 
 const detailTo = computed(() =>
     props.project.category === 'extension' ? '/projects/extension' : null
@@ -77,16 +88,20 @@ function openRepo(e: Event) {
                 {{ project.description }}
             </p>
 
-            <div v-if="project.language" class="mb-4">
+            <div v-if="topLanguage" class="mb-4">
                 <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-mono text-soft">{{ project.language.name }}</span>
-                    <span class="font-mono text-soft">{{ project.language.percent }}%</span>
+                    <span class="font-mono text-soft">{{ topLanguage.name }}</span>
+                    <span class="font-mono text-soft">{{ topLanguage.percent }}%</span>
                 </div>
+                <div class="flex h-1.5 bg-ink-200 dark:bg-ink-800 rounded-full overflow-hidden">
+                    <div v-for="s in languages" :key="s.name" class="h-full transition-all"
+                        :style="{ width: s.percent + '%', backgroundColor: s.color }"
+                        :title="`${s.name} ${s.percent}%`" />
+                </div>
+            </div>
+            <div v-else-if="langLoading" class="mb-4" aria-hidden="true">
                 <div class="h-1.5 bg-ink-200 dark:bg-ink-800 rounded-full overflow-hidden">
-                    <div class="h-full rounded-full transition-all" :style="{
-                        width: project.language.percent + '%',
-                        backgroundColor: project.language.color
-                    }" />
+                    <div class="h-full w-1/3 rounded-full bg-ink-300 dark:bg-ink-700 animate-pulse" />
                 </div>
             </div>
 

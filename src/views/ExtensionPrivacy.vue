@@ -35,9 +35,12 @@ import { RouterLink } from 'vue-router'
                 <!-- 欢迎 -->
                 <div>
                     <h2 class="text-xl font-semibold mb-3">欢迎使用</h2>
-                    <p class="text-soft leading-relaxed">
+                    <p class="text-soft leading-relaxed mb-3">
                         GitHub Accelerator 是一款智能 GitHub 下载加速器，通过智能代理节点选择和 302
-                        重定向，为您提供快速的 GitHub 资源下载体验。在使用本扩展之前，请仔细阅读以下隐私政策。
+                        重定向，为您提供快速的 GitHub 资源下载体验。
+                    </p>
+                    <p class="text-soft leading-relaxed">
+                        在使用本扩展之前，请仔细阅读以下隐私政策。点击「同意」即表示您理解并接受本政策的所有内容。
                     </p>
                 </div>
 
@@ -47,7 +50,7 @@ import { RouterLink } from 'vue-router'
                     <div
                         class="card p-4 border-l-4 border-l-primary bg-primary/5 text-sm mb-4">
                         本扩展<strong>不会收集、存储或传输</strong>任何个人信息、浏览历史、凭证或敏感数据。不使用任何
-                        Cookie 或第三方跟踪技术。
+                        Cookie 或第三方跟踪技术。本扩展仅收集匿名聚合统计数据（详见下方「匿名统计功能」）。
                     </div>
 
                     <p class="text-soft text-sm mb-3">扩展仅在本地浏览器存储中保存以下数据：</p>
@@ -115,7 +118,7 @@ import { RouterLink } from 'vue-router'
                             <tbody>
                                 <tr class="border-b border-ink-100 dark:border-ink-900">
                                     <td class="p-3 text-soft">累计加速跳转次数</td>
-                                    <td class="p-3 text-soft">加速重定向被触发的总次数</td>
+                                    <td class="p-3 text-soft">加速重定向被触发的总次数（简单计数）</td>
                                     <td class="p-3 text-emerald-600 dark:text-emerald-400">是，仅聚合数字</td>
                                 </tr>
                                 <tr class="border-b border-ink-100 dark:border-ink-900">
@@ -125,12 +128,12 @@ import { RouterLink } from 'vue-router'
                                 </tr>
                                 <tr class="border-b border-ink-100 dark:border-ink-900">
                                     <td class="p-3 text-soft">浏览器类型</td>
-                                    <td class="p-3 text-soft">Chromium 或 Firefox</td>
+                                    <td class="p-3 text-soft">Chromium 或 Firefox，用于按浏览器维度汇总</td>
                                     <td class="p-3 text-emerald-600 dark:text-emerald-400">是，仅分类标识</td>
                                 </tr>
                                 <tr>
                                     <td class="p-3 text-soft">扩展版本号</td>
-                                    <td class="p-3 text-soft">当前扩展版本</td>
+                                    <td class="p-3 text-soft">当前扩展版本，用于按版本维度汇总</td>
                                     <td class="p-3 text-emerald-600 dark:text-emerald-400">是，仅版本号</td>
                                 </tr>
                             </tbody>
@@ -156,13 +159,39 @@ import { RouterLink } from 'vue-router'
 
                     <p class="text-soft text-sm mt-4">
                         统计数据仅用于了解扩展使用情况以及对外展示（如「累计加速突破 X
-                        次」）。数据会在本地累积后批量提交至服务器进行汇总，但绝不会传输任何个人身份信息。
+                        次」）。数据会在本地累积后批量提交至我们的服务器（addon-analytics.hubp.org）进行汇总，但绝不会传输任何个人身份信息。如果您无法接受本隐私政策，建议直接卸载本扩展。
                     </p>
                 </div>
 
                 <!-- 网络请求 -->
                 <div>
                     <h2 class="text-xl font-semibold mb-3">网络请求说明</h2>
+
+                    <div
+                        class="card p-4 border-l-4 border-l-amber-500 bg-amber-500/5 text-sm mb-4">
+                        <div class="flex items-start gap-2">
+                            <AlertTriangle class="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                            <div class="space-y-2">
+                                <p class="font-semibold">关于地理位置检测的提示：</p>
+                                <p class="text-soft">
+                                    为判断您是否位于中国大陆（决定是否需要加速），扩展会通过 Cloudflare 边缘节点的
+                                    <code
+                                        class="font-mono text-xs px-1 py-0.5 rounded bg-ink-100 dark:bg-ink-900">/cdn-cgi/trace</code>
+                                    端点获取您的 IP 所属地区。该端点直接由 Cloudflare 网络应答，不经过任何第三方服务器。
+                                </p>
+                                <p class="text-soft">
+                                    检测顺序：优先请求自有域名 <strong>gh.dpik.top</strong>（您的 IP 不会发送给任何第三方）；如不可用则依次回退到
+                                    visa.cn、cloudflare.com（此时您的 IP 会暴露给 Cloudflare/Visa）；最后回退到第三方服务（api.ipapi.is /
+                                    api.ip.sb，此时您的 IP 会暴露给上述第三方）。
+                                </p>
+                                <p class="text-soft">
+                                    我们本身<strong>不会存储、记录或上报</strong>您的 IP
+                                    地址，也无法控制第三方如何处理该信息。如果您无法接受本隐私政策，建议直接卸载本扩展。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <p class="text-soft text-sm mb-3">扩展会向以下地址发起网络请求：</p>
 
                     <div class="card overflow-hidden">
@@ -181,12 +210,23 @@ import { RouterLink } from 'vue-router'
                                     <td class="p-3 text-soft">获取可用代理节点列表</td>
                                 </tr>
                                 <tr class="border-b border-ink-100 dark:border-ink-900">
-                                    <td class="p-3 text-soft font-mono text-xs">api.ipapi.is / api.ip.sb</td>
-                                    <td class="p-3 text-soft">无</td>
-                                    <td class="p-3 text-soft">检测地理位置（判断是否需要加速）</td>
+                                    <td class="p-3 text-soft font-mono text-xs">gh.dpik.top/cdn-cgi/trace（自有域名）</td>
+                                    <td class="p-3 text-soft">IP 地址（仅用于判断所属地区，不存储、不记录）</td>
+                                    <td class="p-3 text-soft">检测地理位置（优先，数据不经过第三方）</td>
                                 </tr>
                                 <tr class="border-b border-ink-100 dark:border-ink-900">
-                                    <td class="p-3 text-soft font-mono text-xs">代理节点（如 gh.llkk.cc）</td>
+                                    <td class="p-3 text-soft font-mono text-xs">www.visa.cn / www.cloudflare.com 的
+                                        /cdn-cgi/trace</td>
+                                    <td class="p-3 text-soft">IP 地址（仅用于判断所属地区，不存储、不记录）</td>
+                                    <td class="p-3 text-soft">检测地理位置（兜底 1，由 Cloudflare/Visa 应答）</td>
+                                </tr>
+                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                    <td class="p-3 text-soft font-mono text-xs">api.ipapi.is / api.ip.sb</td>
+                                    <td class="p-3 text-soft">IP 地址（仅用于判断所属地区，不存储、不记录）</td>
+                                    <td class="p-3 text-soft">检测地理位置（兜底 2，仅当前两者不可用时）</td>
+                                </tr>
+                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                    <td class="p-3 text-soft font-mono text-xs">代理节点（如 gh.dpik.top）</td>
                                     <td class="p-3 text-soft">无</td>
                                     <td class="p-3 text-soft">测速，下载测试资源</td>
                                 </tr>

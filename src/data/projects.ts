@@ -26,7 +26,7 @@ export const projects: Project[] = [
         tagline: '智能 GitHub 下载加速浏览器扩展',
         description:
             '智能识别用户地理位置与下载场景，通过 302 重定向自动选择最优节点，兼容 IDM 等下载工具，覆盖 Chrome / Edge / Firefox。',
-        stack: ['JavaScript 69.7%', 'HTML 26.7%', 'PowerShell'],
+        stack: ['JavaScript', 'HTML', 'PowerShell'],
         license: 'MIT',
         language: { name: 'JavaScript', percent: 69.7, color: '#f1e05a' },
         features: [
@@ -54,7 +54,7 @@ export const projects: Project[] = [
         tagline: '即用型 GitHub 代理 Web 加速链接转换',
         description:
             '基于 Next.js 16、React 19、Tailwind CSS 4 与 TypeScript 重构的 GitHub 代理网站，提供节点选择、测速、Releases 列表等即用功能。',
-        stack: ['Next.js 16', 'React 19', 'TypeScript 97.9%', 'Tailwind CSS 4'],
+        stack: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS 4'],
         license: 'GPL-3.0',
         language: { name: 'TypeScript', percent: 97.9, color: '#3178c6' },
         features: [
@@ -67,7 +67,7 @@ export const projects: Project[] = [
         ],
         highlights: [
             { label: '线上地址', value: 'github.akams.cn' },
-            { label: '语言占比', value: 'TS 97.9%' },
+            { label: '语言', value: 'TypeScript' },
             { label: '框架', value: 'Next.js 16' },
             { label: 'UI', value: 'Tailwind 4' }
         ],
@@ -96,7 +96,7 @@ export const projects: Project[] = [
         highlights: [
             { label: '运行平台', value: 'Cloudflare' },
             { label: '部署成本', value: '零基础设施' },
-            { label: '代码', value: '100% JS' },
+            { label: '语言', value: 'JavaScript' },
             { label: '协议', value: 'GitHub 全量' }
         ],
         releasedAt: '2025-02'

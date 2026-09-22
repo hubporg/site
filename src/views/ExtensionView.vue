@@ -323,18 +323,14 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
 <template>
     <div>
         <!-- HERO -->
-        <section
-            class="relative overflow-hidden border-b border-ink-200 dark:border-ink-800">
+        <section class="relative overflow-hidden border-b border-ink-200 dark:border-ink-800">
             <div class="absolute inset-0 grid-bg opacity-60 dark:opacity-30" />
-            <div
-                class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink-50 dark:to-ink-950" />
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink-50 dark:to-ink-950" />
             <div class="absolute -top-32 left-1/2 -translate-x-1/2 h-[28rem] w-[48rem] pointer-events-none dark:hidden">
-                <div
-                    class="orb orb-1 h-full w-full rounded-full bg-purple-500/30 dark:bg-purple-500/20 blur-3xl" />
+                <div class="orb orb-1 h-full w-full rounded-full bg-purple-500/30 dark:bg-purple-500/20 blur-3xl" />
             </div>
             <div class="absolute top-32 right-0 h-96 w-96 pointer-events-none dark:hidden">
-                <div
-                    class="orb orb-2 h-full w-full rounded-full bg-pink-400/30 dark:bg-pink-400/20 blur-3xl" />
+                <div class="orb orb-2 h-full w-full rounded-full bg-pink-400/30 dark:bg-pink-400/20 blur-3xl" />
             </div>
             <div class="absolute inset-0 pointer-events-none">
                 <FireCanvas />
@@ -342,7 +338,8 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
 
             <div class="container-page relative pt-20 pb-24 sm:pt-28 sm:pb-32">
                 <div class="max-w-3xl relative">
-                    <div class="absolute -inset-x-8 -inset-y-4 rounded-lg pointer-events-none z-0 dark:bg-gradient-to-r dark:from-ink-950/60 dark:via-ink-950/30 dark:to-transparent" />
+                    <div
+                        class="absolute -inset-x-8 -inset-y-4 rounded-lg pointer-events-none z-0 dark:bg-gradient-to-r dark:from-ink-950/60 dark:via-ink-950/30 dark:to-transparent" />
                     <div
                         class="relative z-10 inline-flex items-center gap-2 rounded-full border border-ink-200 dark:border-ink-800 bg-white/70 dark:bg-ink-1000/70 backdrop-blur px-3 py-1.5 mb-6 text-xs font-mono">
                         <Puzzle class="h-3.5 w-3.5 text-purple-500" />
@@ -361,8 +358,8 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                     </p>
 
                     <div class="relative z-10 flex flex-wrap items-center gap-3 mb-10 w-full sm:w-auto">
-                        <a :href="installTarget.href"
-                            target="_blank" rel="noreferrer" class="btn-primary w-full sm:w-auto justify-center">
+                        <a :href="installTarget.href" target="_blank" rel="noreferrer"
+                            class="btn-primary w-full sm:w-auto justify-center">
                             <Download class="h-4 w-4" />
                             安装到 {{ installTarget.name.replace(' 扩展商店', '').replace(' 附加组件', '').replace(' 应用商店', '') }}
                         </a>
@@ -400,15 +397,12 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                     </div>
 
                     <div class="relative z-10 flex flex-wrap items-center gap-2 text-xs font-mono text-soft">
-                        <span
-                            class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">MIT</span>
-                        <span
-                            class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">v{{ latestVersion }}</span>
-                        <span
-                            class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">JavaScript
+                        <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">MIT</span>
+                        <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">v{{ latestVersion
+                            }}</span>
+                        <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">JavaScript
                             69.7%</span>
-                        <span
-                            class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">Chrome / Edge /
+                        <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">Chrome / Edge /
                             Firefox</span>
                     </div>
                 </div>
@@ -419,8 +413,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
         <section class="container-page py-12 sm:py-16">
             <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
                 <div>
-                    <p
-                        class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-2">
+                    <p class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-2">
                         实时数据 / LIVE STATS
                     </p>
                     <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
@@ -428,8 +421,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                     </h2>
                 </div>
                 <div class="flex items-center gap-2 text-xs font-mono text-soft">
-                    <span
-                        v-if="statsSource === 'primary'"
+                    <span v-if="statsSource === 'primary'"
                         class="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-accent/40 text-accent bg-accent/5">
                         <Server class="h-3 w-3" /> 主源 · addon-analytics.hubp.org
                     </span>
@@ -437,8 +429,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                         class="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-orange-500/40 text-orange-600 dark:text-orange-400 bg-orange-500/5">
                         <Server class="h-3 w-3" /> 备用源 · addon-analytics-hubp.tbedu.top
                     </span>
-                    <button class="btn-ghost h-7 px-2 text-xs" :disabled="statsLoading"
-                        @click="loadStats(true)">
+                    <button class="btn-ghost h-7 px-2 text-xs" :disabled="statsLoading" @click="loadStats(true)">
                         <RefreshCcw class="h-3 w-3" :class="statsLoading && 'animate-spin'" />
                         刷新
                     </button>
@@ -482,7 +473,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                 <div class="card p-5">
                     <div class="flex items-center gap-2 mb-2">
                         <Globe2 class="h-4 w-4 text-purple-500" />
-                        <span class="text-xs text-soft">Chromium 版安装</span>
+                        <span class="text-xs text-soft">Chromium 版安装/更新</span>
                     </div>
                     <p class="font-mono text-2xl sm:text-3xl font-semibold">
                         <span v-if="statsLoading">—</span>
@@ -493,7 +484,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                 <div class="card p-5">
                     <div class="flex items-center gap-2 mb-2">
                         <Globe2 class="h-4 w-4 text-orange-500" />
-                        <span class="text-xs text-soft">Firefox 版安装</span>
+                        <span class="text-xs text-soft">Firefox 版安装/更新</span>
                     </div>
                     <p class="font-mono text-2xl sm:text-3xl font-semibold">
                         <span v-if="statsLoading">—</span>
@@ -533,11 +524,9 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                         <h3 class="text-sm font-semibold">热门版本 Top 4</h3>
                     </div>
                     <ul v-if="versionTop.length" class="space-y-2 text-sm">
-                        <li v-for="(v, i) in versionTop" :key="v.v"
-                            class="flex items-center justify-between">
+                        <li v-for="(v, i) in versionTop" :key="v.v" class="flex items-center justify-between">
                             <span class="text-soft flex items-center gap-2">
-                                <span
-                                    class="text-[10px] font-mono w-5 text-right text-ink-400">#{{ i + 1 }}</span>
+                                <span class="text-[10px] font-mono w-5 text-right text-ink-400">#{{ i + 1 }}</span>
                                 v{{ v.v }}
                             </span>
                             <span class="font-mono">{{ formatNumber(v.n) }}</span>
@@ -556,12 +545,10 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
         </section>
 
         <!-- FEATURES -->
-        <section
-            class="border-y border-ink-200 dark:border-ink-800 bg-ink-100/40 dark:bg-ink-1000/40">
+        <section class="border-y border-ink-200 dark:border-ink-800 bg-ink-100/40 dark:bg-ink-1000/40">
             <div class="container-page py-16 sm:py-20">
                 <div class="max-w-2xl mb-12">
-                    <p
-                        class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
+                    <p class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
                         特性 / FEATURES
                     </p>
                     <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3">
@@ -585,8 +572,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
         <section class="container-page py-16 sm:py-20">
             <div class="grid lg:grid-cols-2 gap-10 items-start">
                 <div>
-                    <p
-                        class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
+                    <p class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
                         原理 / HOW IT WORKS
                     </p>
                     <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
@@ -598,8 +584,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                 </div>
                 <ol class="space-y-4">
                     <li v-for="(s, i) in workflow" :key="s.step" class="card p-5 flex gap-4">
-                        <span
-                            class="font-mono text-sm text-soft flex-shrink-0 w-8">{{ s.step }}</span>
+                        <span class="font-mono text-sm text-soft flex-shrink-0 w-8">{{ s.step }}</span>
                         <div>
                             <h3 class="font-semibold mb-1">{{ s.title }}</h3>
                             <p class="text-sm text-soft leading-relaxed">{{ s.desc }}</p>
@@ -612,8 +597,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
         <!-- INSTALL -->
         <section class="container-page py-12 sm:py-16">
             <div class="max-w-2xl mb-8">
-                <p
-                    class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
+                <p class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
                     安装 / INSTALL
                 </p>
                 <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
@@ -679,8 +663,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
         <!-- FAQ -->
         <section class="container-page py-12 sm:py-16">
             <div class="max-w-2xl mb-8">
-                <p
-                    class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
+                <p class="text-xs font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
                     常见问题 / FAQ
                 </p>
                 <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">关于扩展</h2>
@@ -688,11 +671,9 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
             <div class="max-w-3xl space-y-3">
                 <details v-for="(f, i) in faqs" :key="i"
                     class="card p-5 group [&[open]]:border-brand-400/60 dark:[&[open]]:border-brand-500/60">
-                    <summary
-                        class="flex items-center justify-between gap-4 cursor-pointer list-none">
+                    <summary class="flex items-center justify-between gap-4 cursor-pointer list-none">
                         <span class="font-medium text-sm sm:text-base">{{ f.q }}</span>
-                        <span
-                            class="text-soft text-xs font-mono group-open:rotate-45 transition-transform">+</span>
+                        <span class="text-soft text-xs font-mono group-open:rotate-45 transition-transform">+</span>
                     </summary>
                     <p class="text-sm text-soft leading-relaxed mt-3">{{ f.a }}</p>
                 </details>
@@ -702,8 +683,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
         <!-- CTA -->
         <section class="container-page py-12 sm:py-16">
             <div class="card relative overflow-hidden p-8 sm:p-12 grid sm:grid-cols-2 gap-6 items-center">
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-400/10" />
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-400/10" />
                 <div class="relative">
                     <Puzzle class="h-5 w-5 text-brand-500 mb-3" />
                     <h2 class="text-2xl font-semibold tracking-tight mb-2">
@@ -715,8 +695,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                 </div>
                 <div class="relative flex flex-col gap-4 sm:items-end">
                     <div class="flex flex-wrap gap-3 sm:justify-end">
-                        <a :href="installTarget.href"
-                            target="_blank" rel="noreferrer" class="btn-primary">
+                        <a :href="installTarget.href" target="_blank" rel="noreferrer" class="btn-primary">
                             <Download class="h-4 w-4" />
                             {{ installTarget.name }}
                         </a>
