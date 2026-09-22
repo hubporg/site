@@ -24,8 +24,8 @@ import {
     Code2,
     AlertCircle
 } from 'lucide-vue-next'
-import FireCanvas from '../components/FireCanvas.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import GrowthChart from '@/components/GrowthChart.vue'
 import { useRepoLanguages } from '@/composables/useRepoLanguages'
 
 // 语言构成：从 GitHub API 实时获取（1h 本地缓存）
@@ -331,20 +331,15 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
         <section class="relative overflow-hidden border-b border-ink-200 dark:border-ink-800">
             <div class="absolute inset-0 grid-bg opacity-60 dark:opacity-30" />
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink-50 dark:to-ink-950" />
-            <div class="absolute -top-32 left-1/2 -translate-x-1/2 h-[28rem] w-[48rem] pointer-events-none dark:hidden">
+            <div class="absolute -top-32 left-1/2 -translate-x-1/2 h-[28rem] w-[48rem] pointer-events-none">
                 <div class="orb orb-1 h-full w-full rounded-full bg-purple-500/30 dark:bg-purple-500/20 blur-3xl" />
             </div>
-            <div class="absolute top-32 right-0 h-96 w-96 pointer-events-none dark:hidden">
+            <div class="absolute top-32 right-0 h-96 w-96 pointer-events-none">
                 <div class="orb orb-2 h-full w-full rounded-full bg-pink-400/30 dark:bg-pink-400/20 blur-3xl" />
-            </div>
-            <div class="absolute inset-0 pointer-events-none">
-                <FireCanvas />
             </div>
 
             <div class="container-page relative pt-20 pb-24 sm:pt-28 sm:pb-32">
                 <div class="max-w-3xl relative">
-                    <div
-                        class="absolute -inset-x-8 -inset-y-4 rounded-lg pointer-events-none z-0 dark:bg-gradient-to-r dark:from-ink-950/60 dark:via-ink-950/30 dark:to-transparent" />
                     <div
                         class="relative z-10 inline-flex items-center gap-2 rounded-full border border-ink-200 dark:border-ink-800 bg-white/70 dark:bg-ink-1000/70 backdrop-blur px-3 py-1.5 mb-6 text-xs font-mono">
                         <Puzzle class="h-3.5 w-3.5 text-purple-500" />
@@ -498,6 +493,11 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                     </p>
                     <p class="text-xs text-soft mt-1">Firefox 合计</p>
                 </div>
+            </div>
+
+            <!-- 60 天增长趋势 -->
+            <div class="mt-4">
+                <GrowthChart />
             </div>
 
             <!-- 分浏览器加速量 + 热门版本 -->
