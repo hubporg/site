@@ -26,6 +26,11 @@ import {
 } from 'lucide-vue-next'
 import FireCanvas from '../components/FireCanvas.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useRepoLanguages } from '@/composables/useRepoLanguages'
+
+// 语言构成：从 GitHub API 实时获取（1h 本地缓存）
+const { segments: langSegments } = useRepoLanguages('hubporg/ghproxy-extension')
+const topLanguage = computed(() => langSegments.value[0] ?? null)
 
 // 根据 User Agent 检测当前浏览器，返回商店安装信息
 type BrowserType = 'edge' | 'firefox' | 'chrome' | 'unknown'
@@ -400,8 +405,9 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                         <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">MIT</span>
                         <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">v{{ latestVersion
                             }}</span>
-                        <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">JavaScript
-                            69.7%</span>
+                        <span v-if="topLanguage"
+                            class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">{{ topLanguage.name }}
+                            {{ topLanguage.percent }}%</span>
                         <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">Chrome / Edge /
                             Firefox</span>
                     </div>
