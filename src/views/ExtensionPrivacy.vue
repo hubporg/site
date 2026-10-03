@@ -75,20 +75,10 @@ import { RouterLink } from 'vue-router'
                                     <td class="p-3 text-soft">本地存储</td>
                                     <td class="p-3 text-soft">缓存可用代理节点列表及延迟结果</td>
                                 </tr>
-                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                <tr>
                                     <td class="p-3 text-soft">始终加速开关</td>
                                     <td class="p-3 text-soft">本地存储</td>
                                     <td class="p-3 text-soft">用户偏好设置，自动跳转不显示选择页面</td>
-                                </tr>
-                                <tr class="border-b border-ink-100 dark:border-ink-900">
-                                    <td class="p-3 text-soft">会话临时禁用标记</td>
-                                    <td class="p-3 text-soft">本地存储</td>
-                                    <td class="p-3 text-soft">临时跳过当前会话的拦截</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3 text-soft">域名级偏好设置</td>
-                                    <td class="p-3 text-soft">本地存储</td>
-                                    <td class="p-3 text-soft">用户设置的每域名加速/直连偏好</td>
                                 </tr>
                             </tbody>
                         </table>

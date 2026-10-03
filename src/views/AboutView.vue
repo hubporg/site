@@ -24,14 +24,34 @@ const milestones: Milestone[] = [
         ongoing: true
     },
     {
+        date: '2026-10',
+        title: 'ghproxy-extension v1.1.1',
+        body: '图标体系统一为 Octicons；修复 releases/latest 与 raw 链接漏拦，重写右键提示样式。'
+    },
+    {
+        date: '2026-08',
+        title: 'ghproxy-extension v1.1.0',
+        body: '新增页面级抗 IDM 绕过拦截；地理位置检测改用 Cloudflare trace 端点，gh.dpik.top 优先。'
+    },
+    {
+        date: '2026-07',
+        title: 'ghproxy-extension v1.0.9',
+        body: '优化功能实现，修复右键菜单创建时的错误捕获问题。'
+    },
+    {
         date: '2026-06',
-        title: 'ghproxy-extension v1.0.7',
-        body: '添加隐私政策弹窗与匿名统计支持；CRX3 浏览器扩展打包脚本就绪。'
+        title: 'ghproxy-extension v1.0.8',
+        body: '正式加入匿名统计功能及配套页面，完成隐私政策弹窗与 CRX3 打包脚本。'
+    },
+    {
+        date: '2026-05',
+        title: 'ghproxy-extension 快速迭代',
+        body: '密集迭代 v1.0.2 – v1.0.6：完善剪贴板复制与通知样式，加入完整性校验、PRIVACY.md，并补齐 CRX3 打包流程。'
     },
     {
         date: '2026-04',
         title: 'ghproxy-extension v1.0',
-        body: '智能 GitHub 下载加速浏览器扩展首发，覆盖 Chrome / Edge / Firefox'
+        body: '智能 GitHub 下载加速浏览器扩展首发，覆盖 Chrome / Edge / Firefox。'
     },
     {
         date: '2025-12',

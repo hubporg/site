@@ -22,7 +22,8 @@ import {
     Cpu,
     BookOpen,
     Code2,
-    AlertCircle
+    AlertCircle,
+    Activity
 } from 'lucide-vue-next'
 import CodeBlock from '@/components/CodeBlock.vue'
 import GrowthChart from '@/components/GrowthChart.vue'
@@ -219,7 +220,7 @@ const features = [
     {
         icon: Settings,
         title: '精细偏好控制',
-        desc: '可设置全局启用、仅启用指定域名、或完全关闭。设置全部本地存储。'
+        desc: '可设置全局始终加速开关，或按需手动选择节点。设置全部本地存储。'
     },
     {
         icon: ShieldCheck,

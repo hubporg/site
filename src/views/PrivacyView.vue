@@ -151,7 +151,7 @@ function jump(id: string) {
                         <p class="text-soft leading-relaxed">
                             ghproxy-extension 仅在你点击下载加速按钮或启用"全局加速"时介入。
                             扩展不会读取你的 GitHub 账号、token、cookie、浏览历史。
-                            扩展可能在本地存储：节点缓存（URL → 延迟）、用户偏好（启用域名、刷新间隔）。这些数据仅存于浏览器本地。
+                            扩展可能在本地存储：节点缓存（URL → 延迟）、用户偏好（始终加速开关）。这些数据仅存于浏览器本地。
                         </p>
                     </section>
 

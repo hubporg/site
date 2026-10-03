@@ -34,13 +34,13 @@ export const projects: Project[] = [
             '地理检测：仅对大陆地区启用加速',
             '302 重定向：兼容 IDM 等下载工具',
             '节点测速 + 2 小时缓存最优节点',
-            '全局 / 域名级加速偏好设置',
+            '全局加速偏好设置',
             '右键菜单快速复制加速链接'
         ],
         highlights: [
             { label: '兼容', value: 'IDM / 浏览器内置下载' },
             { label: '支持', value: 'Chrome / Edge / FF' },
-            { label: '商店上架', value: 'Edge / Firefox' },
+            { label: '商店上架', value: 'Chrome / Edge / Firefox' },
             { label: '许可证', value: 'MIT' }
         ],
         releasedAt: '2026-06'
