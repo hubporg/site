@@ -26,7 +26,7 @@ const cfSnippet = `// 在 Cloudflare Workers 中部署
 const extensionSnippet = `// ghproxy-extension 浏览器扩展
 // 1. 访问 Edge / Firefox 商店安装
 // 2. 打开 GitHub 文件下载，扩展自动介入
-// 3. 通过 302 重定向走最快节点
+// 3. 通过加速链接走最快节点
 
 // 也支持全局偏好：
 //   - 全局：所有 GitHub 下载都加速`
@@ -86,7 +86,7 @@ const acceleratedItems = [
           </div>
           <h3 class="font-semibold mb-2">浏览器扩展</h3>
           <p class="text-sm text-soft mb-4">
-            安装 ghproxy-extension，打开 GitHub 下载即自动加速。302 重定向兼容 IDM，无需任何配置。
+            安装 ghproxy-extension，打开 GitHub 下载即自动加速。兼容 IDM，无需任何配置。
           </p>
           <ul class="space-y-2 text-sm text-soft mb-5 flex-1">
             <li class="flex items-start gap-2">

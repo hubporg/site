@@ -204,8 +204,8 @@ const features = [
     },
     {
         icon: Zap,
-        title: '302 重定向加速',
-        desc: '把下载请求重定向到最快节点。原生兼容 IDM、Aria2、浏览器内置下载器。'
+        title: '加速链接跳转',
+        desc: '把下载请求指向最快节点。原生兼容 IDM、Aria2、浏览器内置下载器。'
     },
     {
         icon: MapPin,
@@ -232,7 +232,7 @@ const features = [
 const workflow = [
     { step: '01', title: '匹配下载场景', desc: '扩展监听 GitHub 文件下载链接，匹配 raw / release / archive 规则。' },
     { step: '02', title: '选择最优节点', desc: '从测速缓存中读取延迟最低的健康节点，无缓存时实时测速一次。' },
-    { step: '03', title: '302 重定向', desc: '把请求重定向到 `节点/原始 URL`，由节点服务器流式回源 GitHub。' },
+    { step: '03', title: '跳转加速链接', desc: '把请求指向 `节点/原始 URL`，由节点服务器流式回源 GitHub。' },
     { step: '04', title: '浏览器下载接管', desc: '浏览器与 IDM 接管下载，下载速度取决于节点带宽，常见 10MB/s+。' }
 ]
 
@@ -292,7 +292,7 @@ const faqs = [
     },
     {
         q: '下载到一半中断怎么办？',
-        a: '支持断点续传。IDM / Aria2 会在 302 后保持与节点的长连接，节点支持 Range 即可续传。'
+        a: '支持断点续传。IDM / Aria2 会在跳转后保持与节点的长连接，节点支持 Range 即可续传。'
     },
     {
         q: '节点从哪里来？',
@@ -354,7 +354,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                     </h1>
 
                     <p class="relative z-10 text-lg text-soft max-w-2xl leading-relaxed mb-8">
-                        智能 GitHub 下载加速浏览器扩展。安装即用，302 重定向兼容 IDM / Aria2，
+                        智能 GitHub 下载加速浏览器扩展。安装即用，兼容 IDM / Aria2，
                         自动选择最优节点，覆盖 Chrome / Edge / Firefox。
                     </p>
 

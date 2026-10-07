@@ -36,8 +36,7 @@ import { RouterLink } from 'vue-router'
                 <div>
                     <h2 class="text-xl font-semibold mb-3">欢迎使用</h2>
                     <p class="text-soft leading-relaxed mb-3">
-                        GitHub Accelerator 是一款智能 GitHub 下载加速器，通过智能代理节点选择和 302
-                        重定向，为您提供快速的 GitHub 资源下载体验。
+                        GitHub Accelerator 是一款智能 GitHub 下载加速器，通过智能代理节点选择，为您提供快速的 GitHub 资源下载体验。
                     </p>
                     <p class="text-soft leading-relaxed">
                         在使用本扩展之前，请仔细阅读以下隐私政策。点击「同意」即表示您理解并接受本政策的所有内容。

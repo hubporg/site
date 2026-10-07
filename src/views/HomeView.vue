@@ -232,7 +232,7 @@ const joinWays = [
                                 <span class="text-[10px] font-mono text-soft whitespace-nowrap">JavaScript · MIT</span>
                             </div>
                             <p class="text-sm text-soft line-clamp-2">
-                                智能 GitHub 下载加速浏览器扩展，兼容 IDM，302 重定向
+                                智能 GitHub 下载加速浏览器扩展，兼容 IDM，自动加速
                             </p>
                         </div>
                         <ArrowRight

@@ -25,14 +25,14 @@ export const projects: Project[] = [
         category: 'extension',
         tagline: '智能 GitHub 下载加速浏览器扩展',
         description:
-            '智能识别用户地理位置与下载场景，通过 302 重定向自动选择最优节点，兼容 IDM 等下载工具，覆盖 Chrome / Edge / Firefox。',
+            '智能识别用户地理位置与下载场景，自动选择最优节点加速下载，兼容 IDM 等下载工具，覆盖 Chrome / Edge / Firefox。',
         stack: ['JavaScript', 'HTML', 'PowerShell'],
         license: 'MIT',
         language: { name: 'JavaScript', percent: 69.7, color: '#f1e05a' },
         features: [
             '智能加速：自动选择最优代理节点',
             '地理检测：仅对大陆地区启用加速',
-            '302 重定向：兼容 IDM 等下载工具',
+            '加速链接：兼容 IDM 等下载工具',
             '节点测速 + 2 小时缓存最优节点',
             '全局加速偏好设置',
             '右键菜单快速复制加速链接'
