@@ -28,6 +28,15 @@ import {
 import CodeBlock from '@/components/CodeBlock.vue'
 import GrowthChart from '@/components/GrowthChart.vue'
 import { useRepoLanguages } from '@/composables/useRepoLanguages'
+import { useExtensionBridge } from '@/composables/useExtensionBridge'
+
+const { state: extensionState } = useExtensionBridge()
+const extensionCounts = computed(() => {
+    const c = extensionState.value?.counts
+    if (!c || (c.jumps === 0 && c.installs === 0)) return null
+    return c
+})
+const extensionVersion = computed(() => extensionState.value?.version || '')
 
 // 语言构成：从 GitHub API 实时获取（1h 本地缓存）
 const { segments: langSegments } = useRepoLanguages('hubporg/ghproxy-extension')
@@ -436,6 +445,17 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                         刷新
                     </button>
                 </div>
+            </div>
+
+            <div v-if="extensionCounts"
+                class="card p-3 sm:p-4 mb-4 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs sm:text-sm">
+                <span class="flex items-center gap-2 font-medium">
+                    <Puzzle class="h-4 w-4 text-brand-500" />
+                    已检测到浏览器扩展{{ extensionVersion ? ` v${extensionVersion}` : '' }}
+                </span>
+                <span class="text-soft">本机累计贡献：</span>
+                <span class="font-mono">加速 {{ extensionCounts.jumps.toLocaleString() }} 次</span>
+                <span class="font-mono">安装/更新 {{ extensionCounts.installs.toLocaleString() }} 次</span>
             </div>
 
             <div v-if="statsError"

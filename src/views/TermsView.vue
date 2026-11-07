@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { FileText, Zap, ShieldCheck, AlertTriangle, Copyright, GitFork, XCircle, Server, RefreshCw, ScrollText, Bell, Mail, List, ChevronDown } from 'lucide-vue-next'
+import { useTocSpy } from '@/composables/useTocSpy'
 
 const toc = [
     { id: 'intro', label: '引言', icon: FileText },
@@ -19,10 +20,10 @@ const toc = [
 ]
 
 const mobileTocOpen = ref(false)
+const { activeId, jumpTo } = useTocSpy(toc.map((t) => t.id))
 
 function jump(id: string) {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    jumpTo(id)
     mobileTocOpen.value = false
 }
 </script>
@@ -65,7 +66,11 @@ function jump(id: string) {
                         <ul v-if="mobileTocOpen" class="border-t border-ink-200 dark:border-ink-800 py-2">
                             <li v-for="t in toc" :key="t.id">
                                 <button @click="jump(t.id)"
-                                    class="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40 transition-colors">
+                                    class="w-full text-left flex items-center gap-2 px-4 py-2 text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
                                     <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
                                     {{ t.label }}
                                 </button>
@@ -73,21 +78,23 @@ function jump(id: string) {
                         </ul>
                     </div>
 
-                    <div class="hidden lg:block">
-                        <div class="sticky top-24">
-                            <p class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
-                                目录
-                            </p>
-                            <ul class="space-y-1">
-                                <li v-for="t in toc" :key="t.id">
-                                    <button @click="jump(t.id)"
-                                        class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40 transition-colors">
-                                        <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
-                                        {{ t.label }}
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="hidden lg:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin pr-1">
+                        <p class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
+                            目录
+                        </p>
+                        <ul class="space-y-1">
+                            <li v-for="t in toc" :key="t.id">
+                                <button @click="jump(t.id)"
+                                    class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
+                                    <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
+                                    {{ t.label }}
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </aside>
 

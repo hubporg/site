@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import { TrendingUp, Loader2, AlertCircle } from 'lucide-vue-next'
+import { TrendingUp, Loader2, AlertCircle, TriangleAlert } from 'lucide-vue-next'
 
 interface BrowserCount {
     chromium?: number
@@ -56,6 +56,9 @@ const metrics: { key: Metric; label: string }[] = [
     { key: 'jumps', label: '加速跳转' },
     { key: 'installs', label: '安装更新' }
 ]
+// 判定疑似刷量时的绝对门槛：跳转和安装的量级差一个数量级
+const ANOMALY_ABS_FLOOR: Record<Metric, number> = { jumps: 3000, installs: 1000 }
+const ANOMALY_RATIO = 6
 const dimensions: { key: Dimension; label: string }[] = [
     { key: 'browser', label: '按浏览器' },
     { key: 'version', label: '按版本' }
@@ -168,6 +171,47 @@ const series = computed<Series[]>(() => {
 })
 
 const maxYTarget = computed(() => Math.max(1, ...series.value.flatMap((s) => s.values)))
+
+function median(values: number[]) {
+    const sorted = [...values].sort((a, b) => a - b)
+    const mid = sorted.length >> 1
+    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+}
+
+// 疑似刷量检测：接口返回的是累计快照，先差分出每日新增，再和此前 7 天的日增中位数比较
+const anomaly = computed(() => {
+    const values = rows.value.map((r) => r.total)
+    if (values.length < 9) return null
+    const deltas: number[] = []
+    for (let i = 1; i < values.length; i++) deltas.push(values[i] - values[i - 1])
+    const floor = ANOMALY_ABS_FLOOR[metric.value]
+    let latest: { date: string; delta: number; baseline: number; ratio: number } | null = null
+    for (let i = 7; i < deltas.length; i++) {
+        const baseline = median(deltas.slice(i - 7, i))
+        const delta = deltas[i]
+        // 绝对增量够大，且远超近期常态，才判为疑似刷量
+        if (delta >= floor && delta >= baseline * ANOMALY_RATIO) {
+            latest = {
+                date: records.value[i + 1].date,
+                delta,
+                baseline,
+                ratio: delta / Math.max(1, baseline)
+            }
+        }
+    }
+    return latest
+})
+
+const anomalyText = computed(() => {
+    const a = anomaly.value
+    if (!a) return null
+    return {
+        date: a.date,
+        label: metrics.find((m) => m.key === metric.value)?.label ?? '',
+        delta: Math.round(a.delta).toLocaleString(),
+        ratio: a.ratio >= 10 ? String(Math.round(a.ratio)) : a.ratio.toFixed(1)
+    }
+})
 
 // 动画渲染态：切换指标/维度时在数值间插值，形成上下浮动过渡
 const display = ref<AnimSeries[]>([])
@@ -311,20 +355,57 @@ const hover = computed(() => {
     }
 })
 
-const tooltipLeft = computed(() => {
-    if (!hover.value) return '0%'
-    const pct = (hover.value.x / W) * 100
-    return `${Math.min(92, Math.max(8, pct))}%`
-})
+// 提示框跟随指针：水平跟手、垂直自动躲到折线另一侧，避免固定位置挡住折线
+const tipEl = ref<HTMLDivElement | null>(null)
+const tipPos = ref<{ left: number; top: number; below: boolean; touch: boolean } | null>(null)
+// 记录当前朝向，折线中点附近加一点迟滞，避免指针微动时提示框上下抖动
+let lastBelow: boolean | null = null
 
-function onMove(e: MouseEvent) {
+function onMove(e: PointerEvent) {
     const n = records.value.length
-    if (n < 2) return
-    const rect = (e.currentTarget as SVGSVGElement).getBoundingClientRect()
+    const svg = e.currentTarget as SVGSVGElement
+    const rect = svg.getBoundingClientRect()
+    if (n < 2 || rect.width === 0 || rect.height === 0) return
+
     const xs = ((e.clientX - rect.left) * W) / rect.width
     const ratio = (xs - PAD.left) / plotW
     const i = Math.round(ratio * (n - 1))
     hoverIndex.value = Math.min(n - 1, Math.max(0, i))
+
+    // 指针在图表内的归一化位置（0~1），用于提示框定位
+    const x = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width))
+    const y = Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height))
+    const pointerY = y * H
+
+    // 折线整体在指针上方就把提示框放到下方，反之放上方
+    const ys = display.value.map((s) => yAt(s.values[i] ?? 0))
+    const lineMid = ys.length ? (Math.min(...ys) + Math.max(...ys)) / 2 : pointerY
+    let below: boolean
+    if (lastBelow === null || Math.abs(pointerY - lineMid) > 12) {
+        below = lineMid < pointerY
+    } else {
+        below = lastBelow
+    }
+
+    // 贴近上下边界时反向，避免提示框超出图表
+    const tipH = tipEl.value?.offsetHeight ?? 96
+    const spaceAbove = y * rect.height
+    const spaceBelow = (1 - y) * rect.height
+    if (below && spaceBelow < tipH + 16) below = false
+    if (!below && spaceAbove < tipH + 16) below = true
+
+    // 触屏优先放在手指上方，手指本身会挡住指针位置
+    const touch = e.pointerType === 'touch'
+    if (touch && spaceAbove >= tipH + 16) below = false
+
+    lastBelow = below
+    tipPos.value = { left: x * 100, top: y * 100, below, touch }
+}
+
+function onLeave() {
+    hoverIndex.value = null
+    tipPos.value = null
+    lastBelow = null
 }
 </script>
 
@@ -372,8 +453,8 @@ function onMove(e: MouseEvent) {
         </div>
 
         <div v-else class="relative">
-            <svg :viewBox="`0 0 ${W} ${H}`" class="w-full h-auto text-ink-200 dark:text-ink-800"
-                @mousemove="onMove" @mouseleave="hoverIndex = null">
+            <svg :viewBox="`0 0 ${W} ${H}`" data-chart-svg class="w-full h-auto text-ink-200 dark:text-ink-800"
+                @pointermove="onMove" @pointerdown="onMove" @pointerleave="onLeave">
                 <g>
                     <line v-for="(g, i) in gridLines" :key="'grid' + i" :x1="PAD.left" :x2="W - PAD.right"
                         :y1="g.y" :y2="g.y" stroke="currentColor" stroke-width="1" />
@@ -401,15 +482,27 @@ function onMove(e: MouseEvent) {
                 </g>
             </svg>
 
-            <div v-if="hover"
-                class="pointer-events-none absolute top-0 z-10 -translate-x-1/2 rounded-lg border border-ink-200 dark:border-ink-800 bg-white/95 dark:bg-ink-950/95 backdrop-blur px-3 py-2 text-xs shadow-soft"
-                :style="{ left: tooltipLeft }">
+            <div v-if="hover && tipPos" ref="tipEl" data-chart-tooltip
+                class="pointer-events-none absolute z-10 rounded-lg border border-ink-200 dark:border-ink-800 bg-white/95 dark:bg-ink-950/95 backdrop-blur px-3 py-2 text-xs shadow-soft"
+                :style="{
+                    left: `clamp(104px, ${tipPos.left}%, calc(100% - 104px))`,
+                    top: `${tipPos.top}%`,
+                    transform: `translate(-50%, ${tipPos.below ? '12px' : tipPos.touch ? 'calc(-100% - 40px)' : 'calc(-100% - 12px)'})`
+                }">
                 <p class="font-mono text-soft mb-1">{{ hover.date }}</p>
                 <p v-for="p in hover.points" :key="'tip-' + p.key" class="font-mono flex items-center gap-1.5">
                     <span class="h-2 w-2 rounded-full" :style="{ backgroundColor: p.color }" />
                     {{ p.label }} {{ p.value.toLocaleString() }}
                 </p>
             </div>
+        </div>
+
+        <div v-if="anomalyText" data-chart-anomaly
+            class="mt-3 flex items-start gap-2 rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+            <TriangleAlert class="h-3.5 w-3.5 mt-[1px] flex-shrink-0" />
+            <p class="leading-relaxed">
+                疑似接口被刷量：{{ anomalyText.date }}「{{ anomalyText.label }}」单日新增 <span class="font-mono">{{ anomalyText.delta }}</span>，约为近期常态的 {{ anomalyText.ratio }} 倍，折线趋势仅供参考。
+            </p>
         </div>
 
         <p class="text-xs text-soft mt-3 font-mono">

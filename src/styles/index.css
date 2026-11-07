@@ -29,6 +29,11 @@
         scroll-behavior: smooth;
     }
 
+    /* 锚点跳转时给固定导航栏留出空间，标题不被遮挡 */
+    article section[id] {
+        scroll-margin-top: 96px;
+    }
+
     body {
         font-family: 'Sora', 'Geist', 'Inter', 'Noto Sans SC', system-ui,
             -apple-system, sans-serif;

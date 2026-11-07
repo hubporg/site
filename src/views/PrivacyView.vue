@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Shield, FileText, Cookie, Server, Database, Lock, UserX, UserCheck, Bell, Mail, List, ChevronDown } from 'lucide-vue-next'
+import { useTocSpy } from '@/composables/useTocSpy'
 
 const toc = [
     { id: 'intro', label: '引言', icon: FileText },
@@ -17,10 +18,10 @@ const toc = [
 ]
 
 const mobileTocOpen = ref(false)
+const { activeId, jumpTo } = useTocSpy(toc.map((t) => t.id))
 
 function jump(id: string) {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    jumpTo(id)
     mobileTocOpen.value = false
 }
 </script>
@@ -40,7 +41,7 @@ function jump(id: string) {
                     我们尽量只收集能让你正常用上 hubp 的最少信息；本文件解释我们收什么、怎么用、怎么保护，以及你能怎么处置。
                 </p>
                 <p class="text-xs text-soft font-mono mt-4">
-                    最后更新：2026-06-08
+                    最后更新：2026-11-07
                 </p>
             </div>
         </section>
@@ -65,7 +66,11 @@ function jump(id: string) {
                         <ul v-if="mobileTocOpen" class="border-t border-ink-200 dark:border-ink-800 py-2">
                             <li v-for="t in toc" :key="t.id">
                                 <button @click="jump(t.id)"
-                                    class="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40 transition-colors">
+                                    class="w-full text-left flex items-center gap-2 px-4 py-2 text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
                                     <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
                                     {{ t.label }}
                                 </button>
@@ -74,22 +79,24 @@ function jump(id: string) {
                     </div>
 
                     <!-- 桌面端：sticky 侧栏 -->
-                    <div class="hidden lg:block">
-                        <div class="sticky top-24">
-                            <p
-                                class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
-                                目录
-                            </p>
-                            <ul class="space-y-1">
-                                <li v-for="t in toc" :key="t.id">
-                                    <button @click="jump(t.id)"
-                                        class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40 transition-colors">
-                                        <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
-                                        {{ t.label }}
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="hidden lg:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin pr-1">
+                        <p
+                            class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
+                            目录
+                        </p>
+                        <ul class="space-y-1">
+                            <li v-for="t in toc" :key="t.id">
+                                <button @click="jump(t.id)"
+                                    class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
+                                    <component :is="t.icon" class="h-3.5 w-3.5 flex-shrink-0" />
+                                    {{ t.label }}
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </aside>
 
@@ -176,12 +183,18 @@ function jump(id: string) {
                     <section id="cookie">
                         <h2 class="text-2xl font-semibold tracking-tight mb-3">5. Cookie 与本地存储</h2>
                         <p class="text-soft leading-relaxed">
-                            hubp.org 官方网站不使用任何追踪 Cookie，不接入任何第三方分析（无 GA / Sentry）。
+                            hubp.org 官方网站使用 Microsoft Clarity 做匿名访问分析（热力图、会话回放、点击统计），
+                            用于改进页面体验；数据由 Microsoft 按其隐私政策处理，不包含你在页面上输入的内容。
+                            除此之外不接入其他第三方分析（无 GA / Sentry）。
+                            Clarity 会写入用于区分访问会话的
+                            <code class="font-mono text-xs">_clck</code> /
+                            <code class="font-mono text-xs">_clsk</code> Cookie；我们不使用广告或跨站追踪 Cookie。
                             本地存储（localStorage）仅用于：
                         </p>
                         <ul class="list-disc pl-5 text-soft space-y-1 mt-2">
                             <li>主题偏好（亮/暗）</li>
-                            <li>节点测速结果缓存（5 小时 TTL，防止频繁测速）</li>
+                            <li>节点测速结果缓存（2 小时 TTL，防止频繁测速）</li>
+                            <li>近 60 天趋势数据的本地缓存（1 小时 TTL）</li>
                         </ul>
                         <p class="text-soft leading-relaxed mt-3">
                             浏览器扩展本身的 localStorage 由扩展代码管理，详见其仓库 README。
