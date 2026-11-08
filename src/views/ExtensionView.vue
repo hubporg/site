@@ -300,7 +300,7 @@ const installLinks = computed(() => {
     const all = [
         {
             name: 'Edge 扩展商店',
-            short: 'Edge',
+            short: 'Edge 商店',
             desc: 'Microsoft 官方上架',
             icon: Globe2,
             href: 'https://microsoftedge.microsoft.com/addons/detail/pingkpgackfhaonibagjlibmobkhgdml',
@@ -308,7 +308,7 @@ const installLinks = computed(() => {
         },
         {
             name: 'Chrome 应用商店',
-            short: 'Chrome',
+            short: 'Chrome 商店',
             desc: 'Chrome Web Store 官方上架(需网络环境)',
             icon: Globe2,
             href: 'https://chromewebstore.google.com/detail/github-accelerator-github/bcbnfbcmbcoogjihnoediilgpfohkdef',
@@ -316,11 +316,19 @@ const installLinks = computed(() => {
         },
         {
             name: 'Firefox 附加组件',
-            short: 'Firefox',
+            short: 'Firefox 商店',
             desc: 'AMO 官方上架',
             icon: Globe2,
             href: 'https://addons.mozilla.org/addon/github-accelerator/',
             tag: 'firefox' as BrowserType
+        },
+        {
+            name: '油猴脚本',
+            short: '安装脚本',
+            desc: 'Tampermonkey / Violentmonkey 用户脚本（0.x）',
+            icon: Code2,
+            href: USERSCRIPT_URL,
+            tag: 'unknown' as BrowserType
         },
         {
             name: 'GitHub Releases',
@@ -739,10 +747,10 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                     安装 / INSTALL
                 </p>
                 <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
-                    三种安装方式
+                    五种安装方式
                 </h2>
                 <p class="text-soft leading-relaxed">
-                    推荐直接通过浏览器商店安装。开发者或自部署需求可从 GitHub Releases 拉取 .crx / .xpi。
+                    推荐直接通过浏览器商店安装；也可以用油猴脚本免扩展使用，或从 GitHub Releases 拉取 .crx / .xpi 自部署。
                 </p>
             </div>
             <div class="grid gap-4 lg:grid-cols-3">
@@ -758,7 +766,7 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                     <p class="text-sm text-soft mb-5 flex-1">{{ l.desc }}</p>
                     <span
                         class="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 dark:text-brand-400 group-hover:gap-2.5 transition-all">
-                        {{ l.short }} 商店
+                        {{ l.short }}
                         <ArrowRight class="h-3.5 w-3.5" />
                     </span>
                 </a>

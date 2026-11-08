@@ -9,6 +9,7 @@ interface StepItem {
     image?: string
 }
 interface Section {
+    id: string
     title: string
     steps: StepItem[]
 }
@@ -20,6 +21,7 @@ const steps: { id: string; browser: string; icon: any; sections: Section[] }[] =
         icon: Chrome,
         sections: [
             {
+                id: 'chrome-crx',
                 title: '方式 A：直接拖入 CRX（推荐）',
                 steps: [
                     {
@@ -40,6 +42,7 @@ const steps: { id: string; browser: string; icon: any; sections: Section[] }[] =
                 ]
             },
             {
+                id: 'chrome-unpacked',
                 title: '方式 B：解压后开发者模式安装（不推荐）',
                 steps: [
                     {
@@ -67,6 +70,7 @@ const steps: { id: string; browser: string; icon: any; sections: Section[] }[] =
         icon: Globe,
         sections: [
             {
+                id: 'firefox-file',
                 title: '从文件安装附加组件',
                 steps: [
                     {
@@ -88,13 +92,29 @@ const steps: { id: string; browser: string; icon: any; sections: Section[] }[] =
 ]
 
 const toc = [
-    { id: 'chrome-edge', label: 'Chrome / Edge' },
-    { id: 'firefox', label: 'Firefox' },
-    { id: 'userscript', label: '油猴脚本' }
+    {
+        id: 'chrome-edge',
+        label: 'Chrome / Edge',
+        children: [
+            { id: 'chrome-crx', label: '方式 A：直接拖入 CRX' },
+            { id: 'chrome-unpacked', label: '方式 B：解压后安装' }
+        ]
+    },
+    {
+        id: 'firefox',
+        label: 'Firefox',
+        children: [{ id: 'firefox-file', label: '从文件安装' }]
+    },
+    {
+        id: 'userscript',
+        label: '油猴脚本',
+        children: [{ id: 'userscript-entry', label: '安装与教程' }]
+    }
 ]
 
+const tocIds = toc.flatMap((t) => [t.id, ...(t.children?.map((c) => c.id) ?? [])])
 const mobileTocOpen = ref(false)
-const { activeId, jumpTo } = useTocSpy(toc.map((t) => t.id))
+const { activeId, jumpTo } = useTocSpy(tocIds)
 
 function jump(id: string) {
     jumpTo(id)
@@ -154,6 +174,18 @@ function jump(id: string) {
                                     :aria-current="activeId === t.id ? 'location' : undefined">
                                     {{ t.label }}
                                 </button>
+                                <ul v-if="t.children" class="pl-4 pb-1 space-y-0.5">
+                                    <li v-for="c in t.children" :key="c.id">
+                                        <button @click="jump(c.id)"
+                                            class="w-full text-left px-4 py-1.5 text-xs transition-colors rounded"
+                                            :class="activeId === c.id
+                                                ? 'text-brand-600 dark:text-brand-400 font-medium bg-brand-500/5'
+                                                : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                            :aria-current="activeId === c.id ? 'location' : undefined">
+                                            {{ c.label }}
+                                        </button>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -172,6 +204,18 @@ function jump(id: string) {
                                     :aria-current="activeId === t.id ? 'location' : undefined">
                                     {{ t.label }}
                                 </button>
+                                <ul v-if="t.children" class="pl-3 pb-1 space-y-0.5 border-l border-ink-200 dark:border-ink-800 ml-3">
+                                    <li v-for="c in t.children" :key="c.id">
+                                        <button @click="jump(c.id)"
+                                            class="w-full text-left pl-2 pr-2 py-1 text-xs rounded transition-colors"
+                                            :class="activeId === c.id
+                                                ? 'text-brand-600 dark:text-brand-400 font-medium bg-brand-500/5'
+                                                : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                            :aria-current="activeId === c.id ? 'location' : undefined">
+                                            {{ c.label }}
+                                        </button>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -187,7 +231,7 @@ function jump(id: string) {
                     <div v-for="(s, si) in group.sections" :key="si" class="card p-5 sm:p-6">
                         <div class="flex items-center gap-2 mb-4">
                             <Sparkles class="h-4 w-4 text-amber-500" />
-                            <h3 class="font-semibold">{{ s.title }}</h3>
+                            <h3 :id="s.id" class="font-semibold scroll-mt-24">{{ s.title }}</h3>
                         </div>
 
                         <ol class="space-y-5 text-sm">
@@ -226,7 +270,7 @@ function jump(id: string) {
                     class="card p-5 border-l-4 border-l-accent bg-accent/5 text-sm flex items-start gap-3 scroll-mt-24">
                     <Code class="h-5 w-5 text-accent mt-0.5 shrink-0" />
                     <div class="flex-1">
-                        <h3 class="font-semibold mb-1">油猴脚本（Tampermonkey / Violentmonkey）</h3>
+                        <h3 id="userscript-entry" class="font-semibold mb-1 scroll-mt-24">油猴脚本（Tampermonkey / Violentmonkey）</h3>
                         <p class="text-soft mb-3">
                             无需安装浏览器扩展，在脚本管理器里安装用户脚本（0.x）即可；
                             节点测速、下载拦截与官网联动的逻辑与扩展一致。

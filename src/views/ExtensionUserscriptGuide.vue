@@ -9,14 +9,43 @@ const TAMPERMONKEY_URL = 'https://www.tampermonkey.net/'
 const VIOLENTMONKEY_URL = 'https://violentmonkey.github.io/'
 
 const toc = [
-    { id: 'tampermonkey', label: 'Tampermonkey' },
-    { id: 'violentmonkey', label: 'Violentmonkey' },
-    { id: 'install', label: '安装脚本' },
-    { id: 'verify', label: '验证与更新' }
+    {
+        id: 'tampermonkey',
+        label: 'Tampermonkey',
+        children: [
+            { id: 'tm-manager', label: '1. 安装脚本管理器' },
+            { id: 'tm-open', label: '2. 打开脚本安装页' }
+        ]
+    },
+    {
+        id: 'violentmonkey',
+        label: 'Violentmonkey',
+        children: [
+            { id: 'vm-manager', label: '1. 安装脚本管理器' },
+            { id: 'vm-diff', label: '2. 与 Tampermonkey 的差异' }
+        ]
+    },
+    {
+        id: 'install',
+        label: '安装脚本',
+        children: [
+            { id: 'install-url', label: '从托管地址安装' },
+            { id: 'install-first', label: '首次运行确认' }
+        ]
+    },
+    {
+        id: 'verify',
+        label: '验证与更新',
+        children: [
+            { id: 'verify-check', label: '确认脚本已生效' },
+            { id: 'verify-update', label: '更新与卸载' }
+        ]
+    }
 ]
 
+const tocIds = toc.flatMap((t) => [t.id, ...t.children.map((c) => c.id)])
 const mobileTocOpen = ref(false)
-const { activeId, jumpTo } = useTocSpy(toc.map((t) => t.id))
+const { activeId, jumpTo } = useTocSpy(tocIds)
 
 function jump(id: string) {
     jumpTo(id)
@@ -86,6 +115,18 @@ function jump(id: string) {
                                     :aria-current="activeId === t.id ? 'location' : undefined">
                                     {{ t.label }}
                                 </button>
+                                <ul v-if="t.children" class="pl-4 pb-1 space-y-0.5">
+                                    <li v-for="c in t.children" :key="c.id">
+                                        <button @click="jump(c.id)"
+                                            class="w-full text-left px-4 py-1.5 text-xs transition-colors rounded"
+                                            :class="activeId === c.id
+                                                ? 'text-brand-600 dark:text-brand-400 font-medium bg-brand-500/5'
+                                                : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                            :aria-current="activeId === c.id ? 'location' : undefined">
+                                            {{ c.label }}
+                                        </button>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -104,6 +145,18 @@ function jump(id: string) {
                                     :aria-current="activeId === t.id ? 'location' : undefined">
                                     {{ t.label }}
                                 </button>
+                                <ul v-if="t.children" class="pl-3 pb-1 space-y-0.5 border-l border-ink-200 dark:border-ink-800 ml-3">
+                                    <li v-for="c in t.children" :key="c.id">
+                                        <button @click="jump(c.id)"
+                                            class="w-full text-left pl-2 pr-2 py-1 text-xs rounded transition-colors"
+                                            :class="activeId === c.id
+                                                ? 'text-brand-600 dark:text-brand-400 font-medium bg-brand-500/5'
+                                                : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                            :aria-current="activeId === c.id ? 'location' : undefined">
+                                            {{ c.label }}
+                                        </button>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -125,13 +178,13 @@ function jump(id: string) {
                             为对应浏览器安装脚本管理器，然后继续下面的「安装脚本」。
                         </p>
 
-                        <h3 class="text-lg font-semibold mt-2">1. 安装脚本管理器</h3>
+                        <h3 id="tm-manager" class="text-lg font-semibold mt-2 scroll-mt-24">1. 安装脚本管理器</h3>
                         <p class="text-soft text-sm">
                             从 Chrome 应用商店、Edge 加载项或 Firefox 附加组件安装 Tampermonkey，安装后确认扩展处于启用状态。
                         </p>
                         <!-- TODO: 填写 Tampermonkey 商店安装步骤（截图 / 注意事项） -->
 
-                        <h3 class="text-lg font-semibold mt-4">2. 打开脚本安装页</h3>
+                        <h3 id="tm-open" class="text-lg font-semibold mt-4 scroll-mt-24">2. 打开脚本安装页</h3>
                         <p class="text-soft text-sm">
                             回到本页点击「安装脚本」，Tampermonkey 会弹出安装确认页，点击「安装」即可。
                         </p>
@@ -156,12 +209,12 @@ function jump(id: string) {
                             ，安装方式与 Tampermonkey 类似。
                         </p>
 
-                        <h3 class="text-lg font-semibold mt-2">1. 安装脚本管理器</h3>
+                        <h3 id="vm-manager" class="text-lg font-semibold mt-2 scroll-mt-24">1. 安装脚本管理器</h3>
                         <p class="text-soft text-sm">
                             在对应浏览器的扩展商店安装 Violentmonkey，或在项目主页下载安装包手动加载。
                         </p>
 
-                        <h3 class="text-lg font-semibold mt-4">2. 与 Tampermonkey 的差异</h3>
+                        <h3 id="vm-diff" class="text-lg font-semibold mt-4 scroll-mt-24">2. 与 Tampermonkey 的差异</h3>
                         <p class="text-soft text-sm">
                             Violentmonkey 不支持 <code class="font-mono text-xs">@sandbox raw</code>，
                             脚本会退化为捕获阶段点击拦截，手动点击下载入口仍能正常进入加速流程。
@@ -178,7 +231,7 @@ function jump(id: string) {
                             <Download class="h-5 w-5 text-brand-500" />
                             <h2 class="text-2xl font-semibold tracking-tight">安装脚本</h2>
                         </div>
-                        <h3 class="text-lg font-semibold mt-2">从托管地址安装</h3>
+                        <h3 id="install-url" class="text-lg font-semibold mt-2 scroll-mt-24">从托管地址安装</h3>
                         <p class="text-soft text-sm">
                             脚本管理器装好后，点击下面的链接，管理器会弹出安装页，确认后即可生效：
                         </p>
@@ -190,7 +243,7 @@ function jump(id: string) {
                             <p class="text-xs text-soft font-mono mt-3 break-all">{{ USERSCRIPT_URL }}</p>
                         </div>
 
-                        <h3 class="text-lg font-semibold mt-4">首次运行确认</h3>
+                        <h3 id="install-first" class="text-lg font-semibold mt-4 scroll-mt-24">首次运行确认</h3>
                         <p class="text-soft text-sm">
                             首次运行会先请求确认隐私政策，确认前不会启用拦截、测速与统计上报。
                         </p>
@@ -211,12 +264,12 @@ function jump(id: string) {
                             托管地址作为备用安装源。
                         </p>
 
-                        <h3 class="text-lg font-semibold mt-2">确认脚本已生效</h3>
+                        <h3 id="verify-check" class="text-lg font-semibold mt-2 scroll-mt-24">确认脚本已生效</h3>
                         <p class="text-soft text-sm">
                             打开 GitHub 文件页，页面会出现加速浮标；也可以在脚本管理器的「已安装脚本」里查看运行状态。
                         </p>
 
-                        <h3 class="text-lg font-semibold mt-4">更新与卸载</h3>
+                        <h3 id="verify-update" class="text-lg font-semibold mt-4 scroll-mt-24">更新与卸载</h3>
                         <p class="text-soft text-sm">
                             脚本管理器会自动检查版本更新；卸载时在脚本管理器里删除脚本，或直接移除脚本管理器扩展。
                         </p>
