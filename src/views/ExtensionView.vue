@@ -837,6 +837,10 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                             <Download class="h-4 w-4" />
                             {{ installTarget.name }}
                         </a>
+                        <a :href="USERSCRIPT_URL" target="_blank" rel="noreferrer" class="btn-secondary">
+                            <Code2 class="h-4 w-4" />
+                            油猴脚本
+                        </a>
                         <a href="https://github.com/hubporg/ghproxy-extension" target="_blank" rel="noreferrer"
                             class="btn-secondary">
                             <Star class="h-4 w-4" />

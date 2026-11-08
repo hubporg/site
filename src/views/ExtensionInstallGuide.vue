@@ -226,7 +226,7 @@ function jump(id: string) {
                     class="card p-5 border-l-4 border-l-accent bg-accent/5 text-sm flex items-start gap-3 scroll-mt-24">
                     <Code class="h-5 w-5 text-accent mt-0.5 shrink-0" />
                     <div class="flex-1">
-                        <p class="font-semibold mb-1">油猴脚本（Tampermonkey / Violentmonkey）</p>
+                        <h3 class="font-semibold mb-1">油猴脚本（Tampermonkey / Violentmonkey）</h3>
                         <p class="text-soft mb-3">
                             无需安装浏览器扩展，在脚本管理器里安装用户脚本（0.x）即可；
                             节点测速、下载拦截与官网联动的逻辑与扩展一致。

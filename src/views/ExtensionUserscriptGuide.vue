@@ -124,7 +124,17 @@ function jump(id: string) {
                             </a>
                             为对应浏览器安装脚本管理器，然后继续下面的「安装脚本」。
                         </p>
-                        <!-- TODO: 填写 Tampermonkey 安装步骤（截图 / 注意事项） -->
+
+                        <h3 class="text-lg font-semibold mt-2">1. 安装脚本管理器</h3>
+                        <p class="text-soft text-sm">
+                            从 Chrome 应用商店、Edge 加载项或 Firefox 附加组件安装 Tampermonkey，安装后确认扩展处于启用状态。
+                        </p>
+                        <!-- TODO: 填写 Tampermonkey 商店安装步骤（截图 / 注意事项） -->
+
+                        <h3 class="text-lg font-semibold mt-4">2. 打开脚本安装页</h3>
+                        <p class="text-soft text-sm">
+                            回到本页点击「安装脚本」，Tampermonkey 会弹出安装确认页，点击「安装」即可。
+                        </p>
                         <div class="card border-dashed p-5 text-sm text-soft">
                             <p class="font-medium mb-1">安装步骤（占位）</p>
                             <p>这里填写 Tampermonkey 的具体步骤：商店安装、开启开发者模式、首次使用提示等。</p>
@@ -145,6 +155,17 @@ function jump(id: string) {
                             </a>
                             ，安装方式与 Tampermonkey 类似。
                         </p>
+
+                        <h3 class="text-lg font-semibold mt-2">1. 安装脚本管理器</h3>
+                        <p class="text-soft text-sm">
+                            在对应浏览器的扩展商店安装 Violentmonkey，或在项目主页下载安装包手动加载。
+                        </p>
+
+                        <h3 class="text-lg font-semibold mt-4">2. 与 Tampermonkey 的差异</h3>
+                        <p class="text-soft text-sm">
+                            Violentmonkey 不支持 <code class="font-mono text-xs">@sandbox raw</code>，
+                            脚本会退化为捕获阶段点击拦截，手动点击下载入口仍能正常进入加速流程。
+                        </p>
                         <!-- TODO: 填写 Violentmonkey 安装步骤（截图 / 注意事项） -->
                         <div class="card border-dashed p-5 text-sm text-soft">
                             <p class="font-medium mb-1">安装步骤（占位）</p>
@@ -157,6 +178,7 @@ function jump(id: string) {
                             <Download class="h-5 w-5 text-brand-500" />
                             <h2 class="text-2xl font-semibold tracking-tight">安装脚本</h2>
                         </div>
+                        <h3 class="text-lg font-semibold mt-2">从托管地址安装</h3>
                         <p class="text-soft text-sm">
                             脚本管理器装好后，点击下面的链接，管理器会弹出安装页，确认后即可生效：
                         </p>
@@ -167,6 +189,11 @@ function jump(id: string) {
                             </a>
                             <p class="text-xs text-soft font-mono mt-3 break-all">{{ USERSCRIPT_URL }}</p>
                         </div>
+
+                        <h3 class="text-lg font-semibold mt-4">首次运行确认</h3>
+                        <p class="text-soft text-sm">
+                            首次运行会先请求确认隐私政策，确认前不会启用拦截、测速与统计上报。
+                        </p>
                         <!-- TODO: 补充首次运行隐私确认的说明 -->
                         <div class="card border-dashed p-5 text-sm text-soft">
                             <p class="font-medium mb-1">首次运行说明（占位）</p>
@@ -182,6 +209,16 @@ function jump(id: string) {
                         <p class="text-soft text-sm">
                             脚本的 <code class="font-mono text-xs">@updateURL</code> 指向扩展仓库，脚本管理器会自动检查更新；
                             托管地址作为备用安装源。
+                        </p>
+
+                        <h3 class="text-lg font-semibold mt-2">确认脚本已生效</h3>
+                        <p class="text-soft text-sm">
+                            打开 GitHub 文件页，页面会出现加速浮标；也可以在脚本管理器的「已安装脚本」里查看运行状态。
+                        </p>
+
+                        <h3 class="text-lg font-semibold mt-4">更新与卸载</h3>
+                        <p class="text-soft text-sm">
+                            脚本管理器会自动检查版本更新；卸载时在脚本管理器里删除脚本，或直接移除脚本管理器扩展。
                         </p>
                         <!-- TODO: 填写验证方式（页面浮标 / 菜单）与更新、卸载步骤 -->
                         <div class="card border-dashed p-5 text-sm text-soft">
