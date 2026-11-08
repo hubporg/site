@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ArrowLeft, BookOpen, Chrome, Globe, Sparkles, Package, Code, Download } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { ArrowLeft, BookOpen, Chrome, Globe, Sparkles, Package, Code, Download, List, ChevronDown } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import { useTocSpy } from '@/composables/useTocSpy'
 
 interface StepItem {
     text: string
@@ -11,8 +13,9 @@ interface Section {
     steps: StepItem[]
 }
 
-const steps: { browser: string; icon: any; sections: Section[] }[] = [
+const steps: { id: string; browser: string; icon: any; sections: Section[] }[] = [
     {
+        id: 'chrome-edge',
         browser: 'Chrome / Edge',
         icon: Chrome,
         sections: [
@@ -59,6 +62,7 @@ const steps: { browser: string; icon: any; sections: Section[] }[] = [
         ]
     },
     {
+        id: 'firefox',
         browser: 'Firefox',
         icon: Globe,
         sections: [
@@ -82,6 +86,20 @@ const steps: { browser: string; icon: any; sections: Section[] }[] = [
         ]
     }
 ]
+
+const toc = [
+    { id: 'chrome-edge', label: 'Chrome / Edge' },
+    { id: 'firefox', label: 'Firefox' },
+    { id: 'userscript', label: '油猴脚本' }
+]
+
+const mobileTocOpen = ref(false)
+const { activeId, jumpTo } = useTocSpy(toc.map((t) => t.id))
+
+function jump(id: string) {
+    jumpTo(id)
+    mobileTocOpen.value = false
+}
 </script>
 
 <template>
@@ -111,9 +129,56 @@ const steps: { browser: string; icon: any; sections: Section[] }[] = [
             </div>
         </section>
 
-        <section class="container-page py-12 sm:py-16 space-y-10">
-            <div class="max-w-3xl space-y-10">
-                <div v-for="(group, gi) in steps" :key="gi" class="space-y-6">
+        <section class="container-page py-10">
+            <div class="grid lg:grid-cols-[240px_1fr] gap-10">
+                <aside>
+                    <div class="lg:hidden mb-6 card overflow-hidden">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium"
+                            @click="mobileTocOpen = !mobileTocOpen"
+                            :aria-expanded="mobileTocOpen">
+                            <span class="flex items-center gap-2">
+                                <List class="h-4 w-4 text-brand-500" />
+                                目录
+                            </span>
+                            <ChevronDown
+                                :class="['h-4 w-4 text-soft transition-transform', mobileTocOpen && 'rotate-180']" />
+                        </button>
+                        <ul v-if="mobileTocOpen" class="border-t border-ink-200 dark:border-ink-800 py-2">
+                            <li v-for="t in toc" :key="t.id">
+                                <button @click="jump(t.id)"
+                                    class="w-full text-left flex items-center gap-2 px-4 py-2 text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
+                                    {{ t.label }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="hidden lg:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin pr-1">
+                        <p class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
+                            目录
+                        </p>
+                        <ul class="space-y-1">
+                            <li v-for="t in toc" :key="t.id">
+                                <button @click="jump(t.id)"
+                                    class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
+                                    {{ t.label }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="max-w-3xl space-y-10">
+                    <div v-for="(group, gi) in steps" :key="gi" :id="group.id" class="space-y-6 scroll-mt-24">
                     <div class="flex items-center gap-2">
                         <component :is="group.icon" class="h-5 w-5 text-primary" />
                         <h2 class="text-2xl font-semibold tracking-tight">{{ group.browser }}</h2>
@@ -157,22 +222,29 @@ const steps: { browser: string; icon: any; sections: Section[] }[] = [
                     </div>
                 </div>
 
-                <div class="card p-5 border-l-4 border-l-accent bg-accent/5 text-sm flex items-start gap-3">
+                <div id="userscript"
+                    class="card p-5 border-l-4 border-l-accent bg-accent/5 text-sm flex items-start gap-3 scroll-mt-24">
                     <Code class="h-5 w-5 text-accent mt-0.5 shrink-0" />
-                    <div>
-                        <p class="font-semibold mb-1">不想装扩展？可以用油猴脚本</p>
+                    <div class="flex-1">
+                        <p class="font-semibold mb-1">油猴脚本（Tampermonkey / Violentmonkey）</p>
                         <p class="text-soft mb-3">
-                            在 Tampermonkey / Violentmonkey 中安装 GitHub Accelerator 用户脚本（0.x），
-                            无需安装浏览器扩展；节点测速、下载拦截与官网联动的逻辑与扩展一致。
+                            无需安装浏览器扩展，在脚本管理器里安装用户脚本（0.x）即可；
+                            节点测速、下载拦截与官网联动的逻辑与扩展一致。
                         </p>
-                        <a href="https://hubp.tbedu.top/userscript/github-accelerator.user.js" target="_blank"
-                            rel="noreferrer"
-                            class="inline-flex items-center gap-1.5 text-accent hover:underline">
-                            <Download class="h-3.5 w-3.5" />
-                            安装油猴脚本
-                        </a>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <RouterLink to="/projects/extension/userscript" class="btn-secondary h-8 px-3">
+                                查看油猴安装教程
+                            </RouterLink>
+                            <a href="https://hubp.tbedu.top/userscript/github-accelerator.user.js" target="_blank"
+                                rel="noreferrer"
+                                class="inline-flex items-center gap-1.5 text-accent hover:underline">
+                                <Download class="h-3.5 w-3.5" />
+                                直接安装脚本
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
             </div>
         </section>
     </div>

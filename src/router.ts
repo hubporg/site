@@ -32,6 +32,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '扩展安装教程 - hubp' }
     },
     {
+        path: '/projects/extension/userscript',
+        name: 'extension-userscript',
+        component: () => import('@/views/ExtensionUserscriptGuide.vue'),
+        meta: { title: '油猴脚本安装教程 - hubp' }
+    },
+    {
         path: '/accelerate',
         name: 'accelerate',
         component: () => import('@/views/AccelerateView.vue'),

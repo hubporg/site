@@ -1,6 +1,25 @@
 <script setup lang="ts">
-import { Shield, ArrowLeft, ExternalLink, AlertTriangle, Info, Code } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { Shield, ArrowLeft, ExternalLink, AlertTriangle, Info, Code, List, ChevronDown } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import { useTocSpy } from '@/composables/useTocSpy'
+
+const toc = [
+    { id: 'welcome', label: '欢迎使用' },
+    { id: 'collect', label: '数据收集说明' },
+    { id: 'stats', label: '匿名统计功能' },
+    { id: 'network', label: '网络请求说明' },
+    { id: 'userscript', label: '油猴脚本' },
+    { id: 'open-source', label: '开源与联系方式' }
+]
+
+const mobileTocOpen = ref(false)
+const { activeId, jumpTo } = useTocSpy(toc.map((t) => t.id))
+
+function jump(id: string) {
+    jumpTo(id)
+    mobileTocOpen.value = false
+}
 </script>
 
 <template>
@@ -30,10 +49,57 @@ import { RouterLink } from 'vue-router'
             </div>
         </section>
 
-        <section class="container-page py-12 sm:py-16 space-y-10">
-            <div class="max-w-3xl space-y-10">
-                <!-- 欢迎 -->
-                <div>
+        <section class="container-page py-10">
+            <div class="grid lg:grid-cols-[240px_1fr] gap-10">
+                <aside>
+                    <div class="lg:hidden mb-6 card overflow-hidden">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium"
+                            @click="mobileTocOpen = !mobileTocOpen"
+                            :aria-expanded="mobileTocOpen">
+                            <span class="flex items-center gap-2">
+                                <List class="h-4 w-4 text-brand-500" />
+                                目录
+                            </span>
+                            <ChevronDown
+                                :class="['h-4 w-4 text-soft transition-transform', mobileTocOpen && 'rotate-180']" />
+                        </button>
+                        <ul v-if="mobileTocOpen" class="border-t border-ink-200 dark:border-ink-800 py-2">
+                            <li v-for="t in toc" :key="t.id">
+                                <button @click="jump(t.id)"
+                                    class="w-full text-left flex items-center gap-2 px-4 py-2 text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
+                                    {{ t.label }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="hidden lg:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin pr-1">
+                        <p class="text-[10px] font-mono uppercase tracking-wider text-soft mb-3">
+                            目录
+                        </p>
+                        <ul class="space-y-1">
+                            <li v-for="t in toc" :key="t.id">
+                                <button @click="jump(t.id)"
+                                    class="w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors"
+                                    :class="activeId === t.id
+                                        ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium'
+                                        : 'text-soft hover:text-brand-500 hover:bg-ink-100/40 dark:hover:bg-ink-1000/40'"
+                                    :aria-current="activeId === t.id ? 'location' : undefined">
+                                    {{ t.label }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="max-w-3xl space-y-10">
+                    <!-- 欢迎 -->
+                    <div id="welcome" class="scroll-mt-24">
                     <h2 class="text-xl font-semibold mb-3">欢迎使用</h2>
                     <p class="text-soft leading-relaxed mb-3">
                         GitHub Accelerator 是一款智能 GitHub 下载加速器，通过智能代理节点选择，为您提供快速的 GitHub 资源下载体验。
@@ -44,7 +110,7 @@ import { RouterLink } from 'vue-router'
                 </div>
 
                 <!-- 数据收集 -->
-                <div>
+                <div id="collect" class="scroll-mt-24">
                     <h2 class="text-xl font-semibold mb-3">数据收集说明</h2>
                     <div
                         class="card p-4 border-l-4 border-l-primary bg-primary/5 text-sm mb-4">
@@ -85,7 +151,7 @@ import { RouterLink } from 'vue-router'
                 </div>
 
                 <!-- 匿名统计 -->
-                <div>
+                <div id="stats" class="scroll-mt-24">
                     <h2 class="text-xl font-semibold mb-3">匿名统计功能</h2>
                     <div
                         class="card p-4 border-l-4 border-l-emerald-500 bg-emerald-500/5 text-sm mb-4">
@@ -153,7 +219,7 @@ import { RouterLink } from 'vue-router'
                 </div>
 
                 <!-- 网络请求 -->
-                <div>
+                <div id="network" class="scroll-mt-24">
                     <h2 class="text-xl font-semibold mb-3">网络请求说明</h2>
 
                     <div
@@ -235,7 +301,7 @@ import { RouterLink } from 'vue-router'
                 </div>
 
                 <!-- 油猴脚本 -->
-                <div>
+                <div id="userscript" class="scroll-mt-24">
                     <h2 class="text-xl font-semibold mb-3">油猴脚本（UserScript）</h2>
                     <p class="text-soft leading-relaxed mb-4">
                         除了浏览器扩展，我们还提供同源的油猴脚本（GitHub Accelerator userscript，版本号 0.x），
@@ -307,7 +373,7 @@ import { RouterLink } from 'vue-router'
                 </div>
 
                 <!-- 开源 -->
-                <div>
+                <div id="open-source" class="scroll-mt-24">
                     <h2 class="text-xl font-semibold mb-3">开源与联系方式</h2>
                     <p class="text-soft text-sm mb-2">
                         本扩展完全开源，您可以随时审查源代码以验证本隐私政策的执行情况：
@@ -320,6 +386,7 @@ import { RouterLink } from 'vue-router'
                         <ExternalLink class="h-3 w-3" />
                     </a>
                 </div>
+            </div>
             </div>
         </section>
     </div>

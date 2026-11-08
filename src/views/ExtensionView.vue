@@ -466,6 +466,9 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                         <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">MIT</span>
                         <span class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">v{{ latestVersion
                             }}</span>
+                        <span v-if="userscriptVersions.length"
+                            class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">油猴 v{{
+                                userscriptVersions[0]?.v }}</span>
                         <span v-if="topLanguage"
                             class="px-2 py-1 rounded border border-ink-200 dark:border-ink-800">{{ topLanguage.name }}
                             {{ topLanguage.percent }}%</span>
