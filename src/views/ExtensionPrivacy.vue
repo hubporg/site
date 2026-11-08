@@ -234,6 +234,78 @@ import { RouterLink } from 'vue-router'
                     </div>
                 </div>
 
+                <!-- 油猴脚本 -->
+                <div>
+                    <h2 class="text-xl font-semibold mb-3">油猴脚本（UserScript）</h2>
+                    <p class="text-soft leading-relaxed mb-4">
+                        除了浏览器扩展，我们还提供同源的油猴脚本（GitHub Accelerator userscript，版本号 0.x），
+                        可通过 Tampermonkey / Violentmonkey 安装。脚本与扩展共用同一套节点列表、测速校验与链接识别规则，
+                        但运行在脚本管理器提供的沙箱里。
+                    </p>
+
+                    <div class="card p-4 border-l-4 border-l-primary bg-primary/5 text-sm mb-4">
+                        <div class="flex items-start gap-2">
+                            <Info class="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                            <span>
+                                脚本同样<strong>不会收集、存储或传输</strong>任何个人信息、浏览历史或页面内容；
+                                仅在本地保存节点缓存、偏好与隐私同意状态。匿名统计（加速次数 / 安装次数）可在脚本菜单里随时关闭。
+                            </span>
+                        </div>
+                    </div>
+
+                    <p class="text-soft text-sm mb-3">脚本会向以下地址发起网络请求：</p>
+
+                    <div class="card overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-ink-200 dark:border-ink-800">
+                                    <th class="text-left p-3 font-semibold">目标地址</th>
+                                    <th class="text-left p-3 font-semibold">发送数据</th>
+                                    <th class="text-left p-3 font-semibold">用途</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                    <td class="p-3 text-soft font-mono text-xs">hubp.tbedu.top/nodes.json</td>
+                                    <td class="p-3 text-soft">无</td>
+                                    <td class="p-3 text-soft">获取可用代理节点列表</td>
+                                </tr>
+                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                    <td class="p-3 text-soft font-mono text-xs">raw.githubusercontent.com</td>
+                                    <td class="p-3 text-soft">无</td>
+                                    <td class="p-3 text-soft">测速图片，用于 SHA-256 完整性校验</td>
+                                </tr>
+                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                    <td class="p-3 text-soft font-mono text-xs">hubp.tbedu.top/announcements.json</td>
+                                    <td class="p-3 text-soft">无</td>
+                                    <td class="p-3 text-soft">获取官网公告</td>
+                                </tr>
+                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                    <td class="p-3 text-soft font-mono text-xs">代理节点（如 gh.dpik.top）</td>
+                                    <td class="p-3 text-soft">加速后的 GitHub 链接</td>
+                                    <td class="p-3 text-soft">通过节点下载加速文件</td>
+                                </tr>
+                                <tr class="border-b border-ink-100 dark:border-ink-900">
+                                    <td class="p-3 text-soft font-mono text-xs">addon-analytics.hubp.org</td>
+                                    <td class="p-3 text-soft">匿名聚合计数（source=userscript）</td>
+                                    <td class="p-3 text-soft">提交匿名统计用于汇总</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-soft font-mono text-xs">
+                                        gh.dpik.top / visa.cn / cloudflare.com / api.ipapi.is / api.ip.sb 的 trace 端点
+                                    </td>
+                                    <td class="p-3 text-soft">IP 地址（仅判断所属地区，不存储、不记录）</td>
+                                    <td class="p-3 text-soft">判断是否需要加速，与扩展一致</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-soft text-sm mt-3">
+                        脚本的隐私政策链接与首次运行提示均指向本页。
+                    </p>
+                </div>
+
                 <!-- 开源 -->
                 <div>
                     <h2 class="text-xl font-semibold mb-3">开源与联系方式</h2>

@@ -88,8 +88,14 @@ interface StatsSummary {
     jumps_by_browser: Record<string, number>
     installs_by_version: Record<string, number>
     jumps_by_version: Record<string, number>
+    installs_by_source?: Record<string, number>
+    jumps_by_source?: Record<string, number>
+    installs_by_source_version?: Record<string, Record<string, number>>
+    jumps_by_source_version?: Record<string, Record<string, number>>
     last_updated: string
 }
+
+const USERSCRIPT_URL = 'https://hubp.tbedu.top/userscript/github-accelerator.user.js'
 
 // 主源 + 备用源：主源不可用时自动降级
 const PRIMARY_URL = 'https://addon-analytics.hubp.org/stats/summary'
@@ -150,29 +156,74 @@ function formatNumber(n: number | undefined): string {
     return v.toLocaleString()
 }
 
+function compareVersion(a: string, b: string): number {
+    const pa = a.split('.').map(Number)
+    const pb = b.split('.').map(Number)
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+        const diff = (pa[i] || 0) - (pb[i] || 0)
+        if (diff !== 0) return diff
+    }
+    return 0
+}
+
 const latestVersion = computed(() => {
     if (!stats.value) return '...'
     const versions = Object.keys(stats.value.installs_by_version || {})
     if (!versions.length) return '...'
-    // 按语义版本号排序取最大
-    return versions.sort((a, b) => {
-        const pa = a.split('.').map(Number)
-        const pb = b.split('.').map(Number)
-        for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-            const diff = (pa[i] || 0) - (pb[i] || 0)
-            if (diff !== 0) return diff
-        }
-        return 0
-    }).pop()!
+    return versions.sort(compareVersion).pop()!
 })
 
-const versionTop = computed(() => {
-    if (!stats.value) return [] as { v: string; n: number }[]
-    return Object.entries(stats.value.installs_by_version || {})
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 4)
-        .map(([v, n]) => ({ v, n }))
+type SourceKey = 'extension' | 'userscript'
+
+interface SourceStat {
+    installs: number
+    jumps: number
+}
+
+const sourceStats = computed<Record<SourceKey, SourceStat> | null>(() => {
+    const s = stats.value
+    if (!s) return null
+    const extension = {
+        installs: s.installs_by_source?.extension ?? 0,
+        jumps: s.jumps_by_source?.extension ?? 0
+    }
+    const userscript = {
+        installs: s.installs_by_source?.userscript ?? 0,
+        jumps: s.jumps_by_source?.userscript ?? 0
+    }
+    if (!extension.installs && !extension.jumps && !userscript.installs && !userscript.jumps) {
+        return null
+    }
+    return { extension, userscript }
 })
+
+interface VersionRow {
+    v: string
+    installs: number
+    jumps: number
+    legacy?: boolean
+}
+
+function versionRows(source: SourceKey): VersionRow[] {
+    const s = stats.value
+    if (!s) return []
+    const installs = s.installs_by_source_version?.[source] ?? {}
+    const jumps = s.jumps_by_source_version?.[source] ?? {}
+    const keys = new Set([...Object.keys(installs), ...Object.keys(jumps)])
+    const rows: VersionRow[] = [...keys]
+        .filter((k) => k !== 'unknown' && /^\d+(\.\d+)*$/.test(k))
+        .sort((a, b) => compareVersion(b, a))
+        .map((k) => ({ v: k, installs: installs[k] ?? 0, jumps: jumps[k] ?? 0 }))
+    const legacyInstalls = installs.unknown ?? 0
+    const legacyJumps = jumps.unknown ?? 0
+    if (legacyInstalls || legacyJumps) {
+        rows.push({ v: 'unknown', installs: legacyInstalls, jumps: legacyJumps, legacy: true })
+    }
+    return rows
+}
+
+const extensionVersions = computed(() => versionRows('extension'))
+const userscriptVersions = computed(() => versionRows('userscript'))
 
 const relativeTime = ref('')
 let _relTimer: ReturnType<typeof setInterval> | null = null
@@ -399,6 +450,11 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                                 Firefox 版
                             </a>
                         </template>
+                        <a :href="USERSCRIPT_URL" target="_blank" rel="noreferrer"
+                            class="btn-secondary w-full sm:w-auto justify-center">
+                            <Code2 class="h-4 w-4" />
+                            油猴脚本
+                        </a>
                         <a href="https://github.com/hubporg/ghproxy-extension" target="_blank" rel="noreferrer"
                             class="btn-ghost w-full sm:w-auto justify-center">
                             <Github class="h-4 w-4" />
@@ -516,6 +572,39 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                 </div>
             </div>
 
+            <div v-if="sourceStats" class="grid sm:grid-cols-2 gap-4 mt-4">
+                <div class="card p-5">
+                    <div class="flex items-center gap-2 mb-2">
+                        <Puzzle class="h-4 w-4 text-brand-500" />
+                        <span class="text-xs text-soft">浏览器扩展（1.x）</span>
+                    </div>
+                    <p class="font-mono text-2xl sm:text-3xl font-semibold">
+                        <span v-if="statsLoading">—</span>
+                        <span v-else>{{ formatNumber(sourceStats?.extension?.installs) }}</span>
+                        <span class="text-xs font-sans font-normal text-soft ml-1.5">安装/更新</span>
+                    </p>
+                    <p class="text-xs text-soft mt-1 font-mono">
+                        跳转 <span v-if="statsLoading">—</span><span
+                            v-else>{{ formatNumber(sourceStats?.extension?.jumps) }}</span>
+                    </p>
+                </div>
+                <div class="card p-5">
+                    <div class="flex items-center gap-2 mb-2">
+                        <Code2 class="h-4 w-4 text-accent" />
+                        <span class="text-xs text-soft">油猴脚本（0.x）</span>
+                    </div>
+                    <p class="font-mono text-2xl sm:text-3xl font-semibold">
+                        <span v-if="statsLoading">—</span>
+                        <span v-else>{{ formatNumber(sourceStats?.userscript?.installs) }}</span>
+                        <span class="text-xs font-sans font-normal text-soft ml-1.5">安装/更新</span>
+                    </p>
+                    <p class="text-xs text-soft mt-1 font-mono">
+                        跳转 <span v-if="statsLoading">—</span><span
+                            v-else>{{ formatNumber(sourceStats?.userscript?.jumps) }}</span>
+                    </p>
+                </div>
+            </div>
+
             <!-- 60 天增长趋势 -->
             <div class="mt-4">
                 <GrowthChart />
@@ -547,16 +636,19 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                 </div>
                 <div class="card p-5">
                     <div class="flex items-center gap-2 mb-3">
-                        <Cpu class="h-4 w-4 text-accent" />
-                        <h3 class="text-sm font-semibold">热门版本 Top 4</h3>
+                        <Puzzle class="h-4 w-4 text-brand-500" />
+                        <h3 class="text-sm font-semibold">扩展版本贡献</h3>
+                        <span class="text-[10px] font-mono text-soft">1.x</span>
                     </div>
-                    <ul v-if="versionTop.length" class="space-y-2 text-sm">
-                        <li v-for="(v, i) in versionTop" :key="v.v" class="flex items-center justify-between">
+                    <ul v-if="extensionVersions.length" class="space-y-2 text-sm">
+                        <li v-for="row in extensionVersions" :key="row.v" class="flex items-center justify-between">
                             <span class="text-soft flex items-center gap-2">
-                                <span class="text-[10px] font-mono w-5 text-right text-ink-400">#{{ i + 1 }}</span>
-                                v{{ v.v }}
+                                <span v-if="row.legacy" class="text-xs">历史版本</span>
+                                <span v-else class="font-mono">v{{ row.v }}</span>
                             </span>
-                            <span class="font-mono">{{ formatNumber(v.n) }}</span>
+                            <span class="font-mono text-xs text-soft">
+                                安装 {{ formatNumber(row.installs) }} · 跳转 {{ formatNumber(row.jumps) }}
+                            </span>
                         </li>
                     </ul>
                     <p v-else class="text-sm text-soft">
@@ -564,6 +656,22 @@ const devLoad = `// 方式 A：直接拖入 CRX（Chrome / Edge） [推荐]
                         <span v-else>暂无数据</span>
                     </p>
                 </div>
+            </div>
+
+            <div v-if="userscriptVersions.length" class="card p-5 mt-4">
+                <div class="flex items-center gap-2 mb-3">
+                    <Code2 class="h-4 w-4 text-accent" />
+                    <h3 class="text-sm font-semibold">油猴脚本版本贡献</h3>
+                    <span class="text-[10px] font-mono text-soft">0.x</span>
+                </div>
+                <ul class="space-y-2 text-sm">
+                    <li v-for="row in userscriptVersions" :key="row.v" class="flex items-center justify-between">
+                        <span class="text-soft font-mono">{{ row.legacy ? '历史版本' : 'v' + row.v }}</span>
+                        <span class="font-mono text-xs text-soft">
+                            安装 {{ formatNumber(row.installs) }} · 跳转 {{ formatNumber(row.jumps) }}
+                        </span>
+                    </li>
+                </ul>
             </div>
 
             <p v-if="stats?.last_updated" class="text-xs text-soft font-mono mt-3">

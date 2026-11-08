@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, BookOpen, Chrome, Globe, Sparkles, Package } from 'lucide-vue-next'
+import { ArrowLeft, BookOpen, Chrome, Globe, Sparkles, Package, Code, Download } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
 interface StepItem {
@@ -153,6 +153,23 @@ const steps: { browser: string; icon: any; sections: Section[] }[] = [
                             rel="noreferrer"
                             class="inline-flex items-center gap-1.5 text-primary hover:underline">
                             前往 Releases 下载
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card p-5 border-l-4 border-l-accent bg-accent/5 text-sm flex items-start gap-3">
+                    <Code class="h-5 w-5 text-accent mt-0.5 shrink-0" />
+                    <div>
+                        <p class="font-semibold mb-1">不想装扩展？可以用油猴脚本</p>
+                        <p class="text-soft mb-3">
+                            在 Tampermonkey / Violentmonkey 中安装 GitHub Accelerator 用户脚本（0.x），
+                            无需安装浏览器扩展；节点测速、下载拦截与官网联动的逻辑与扩展一致。
+                        </p>
+                        <a href="https://hubp.tbedu.top/userscript/github-accelerator.user.js" target="_blank"
+                            rel="noreferrer"
+                            class="inline-flex items-center gap-1.5 text-accent hover:underline">
+                            <Download class="h-3.5 w-3.5" />
+                            安装油猴脚本
                         </a>
                     </div>
                 </div>
